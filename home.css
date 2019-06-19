@@ -15,54 +15,171 @@ body, html {
     height: 100%;
     width: 100%;
     margin: 0;
-    font-family: Ubuntu-Regular, sans-serif;
+    /*font-family: Ubuntu-Regular, sans-serif;*/
+}
+
+.menubar{
+    border-color: white;
+}
+
+.devicebar{
+    border-color: #000000;
 }
 
 #toppane {
     width: 100%;
-    height: 15%;
+    height: 75px;
     display: table;
-    background-color: #84b470;
+    color: white;
+    font-size: 2em;
+    text-align: center;
+    background-color: #122844;
 }
 
 #mainpane {
     width: 100%;
-    height: 85%;
+    height: calc(100vh - 75px);
 }
 
 #logodiv {
-    height: 80%;
-    width: 20%;
-    margin: 10% 0 10% 5%;
+    height: 60px;
+    width: 33.33%;
     display: table-cell;
+    /*padding: 0;*/
+    float: left;
+    margin: 7.5px 0 7.5px 0;
 }
 
 #officondiv {
-    height: 80%;
-    width: 20%;
-    margin: 10% 5% 10% 0;
+    height: 60px;
+    width: 33.33%;
     display: table-cell;
+    /*padding: 0;*/
+    float: right;
+    margin: 7.5px 0 7.5px 0;
 }
 
 .titleicon {
-    height: 10%;
+    height: 60px;
 }
 
-#officon{
+#sglicon {
+    float: left;
+    /*height: 60px;*/
+    /*margin: 10px 0 10px 10px;*/
+}
+
+#officon {
     float: right;
+    /*margin: 10px 10px 10px 0;*/
 }
 
 #title {
-    height: 100%;
-    min-width: 60%;
+    max-height: 75px;
+    width: 33.33%;
+    /*margin: 1 auto;*/
+    /*margin: calc((100px - 2em)/2) 0;*/
     /*font-family: Ubuntu-Bold, sans-serif;*/
     color: white;
-    font-size: 3em;
+    font-size: 0.01em;
     display: table-cell;
     text-align: center;
-    margin: 0 auto;
+    padding: 0;
+    /*float: left;*/
+    transform: translateY(-37.5px);
 }
 
-/*#titletext{*/
-    /*margin: 0 auto;*/
-/*}*/
+#menu{
+    height: 100%;
+    width: 15%;
+    float: left;
+    background-color: #3d7679;
+    color: white;
+    position: relative;
+}
+
+#infopane{
+    height: 100%;
+    width: 85%;
+    float: left;
+}
+
+.menutags{
+    width: 80%;
+    margin: 15% 10%;
+}
+
+#head{
+    text-align: center;
+}
+
+#menuoff{
+    position: absolute;
+    bottom: 0;
+}
+
+#browsetag{
+    border-style: solid;
+    border-width: 1px;
+    border-color: white;
+}
+
+.menutext{
+    margin: 3px;
+}
+
+#graphpane{
+    width: 100%;
+    height: 40%;
+}
+
+.graph{
+    width: 47%;
+    height: 88%;
+    float: left;
+    margin: 1.5%;
+    border-radius: 10px;
+    background-color: black;
+}
+
+#lowerinfo{
+    width: 100%;
+    height: 60%;
+}
+
+#deviceinfo{
+    width: 22%;
+    height: 88%;
+    float: left;
+    margin: 1.5%;
+}
+
+#mappane{
+    width: 72%;
+    height: 88%;
+    float: left;
+    margin: 1.5%;
+    overflow: hidden;
+    background-color: black;
+    border-radius: 15px;
+}
+
+#map{
+    max-width: 100%;
+    /*border-radius: 15px;*/
+}
+
+#commandt{
+    width: 50%;
+    float: left;
+}
+
+#commands{
+    margin: 5px 0 0 0;
+    float: left;
+}
+
+#issue{
+    width: 60%;
+    margin: 0 auto;
+}

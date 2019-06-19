@@ -20,6 +20,9 @@ if (!isset($_SESSION['loggedin'])) {
     <title>Home Page</title>
     <link rel="icon" href="images/icon.png"/>
     <link href="home.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 <body>
 <!--<nav class="navtop">-->
@@ -38,19 +41,73 @@ if (!isset($_SESSION['loggedin'])) {
 <div id="toppane">
     <!--    Logo    Admin Dashboard     Log off-->
     <div id="logodiv">
-        <img class="titleicon" src="images/sgl.png"/>
+        <img class="titleicon" id="sglicon" src="images/sgl.png"/>
     </div>
-    <div id="title">
-        <span id="titletext">
-            ADMIN DASHBOARD
-        </span>
-    </div>
+    ADMIN DASHBOARD
     <div id="officondiv">
         <img class="titleicon" id="officon" src="images/officon.png"/>
     </div>
 </div>
 <div id="mainpane">
-<!--    <img class="titleicon" src="images/map.png"/>-->
+    <div id="menu">
+        <div class="menutags" id="head">
+            <p>CONTROL PANEL</p>
+            <hr class="menubar">
+        </div>
+        <div class="menutags" id="browsetag">
+            <p class="menutext">Browse</p>
+        </div>
+        <div class="menutags">
+            <p class="menutext">Add New SGL Monitor</p>
+        </div>
+        <div class="menutags" id="menuoff">
+            <hr class="menubar">
+            <p class="menutext">Logout</p>
+        </div>
+    </div>
+    <div id="infopane">
+        <div id="graphpane">
+            <!--                        Voltage graph-->
+            <!--                        Power graph-->
+            <div class="graph" id="volgraph">
+
+            </div>
+            <div class="graph" id="powgraph">
+
+            </div>
+        </div>
+        <div id="lowerinfo">
+            <div id="deviceinfo">
+                <div class="deviceinfotags" id="head">
+                    <p>DEVICE INFO</p>
+                    <hr class="devicebar">
+                </div>
+                <div class="deviceinfotags" id="imei">
+                    <p class="devicetext">IMEI: 123456789</p>
+                </div>
+                <div class="deviceinfotags" id="di">
+                    <p class="devicetext">Lat: 1234 Lng: 6789</p>
+                </div>
+                <div class="deviceinfotags" id="latlng">
+                    <p class="devicetext">Pending Command: Shutdown</p>
+                </div>
+                <div class="deviceinfotags" id="pendingcmd">
+                    <p class="devicetext">Time Until Command: 3hr 5min</p>
+                </div>
+                <div class="deviceinfotags" id="commandtext">
+                    <p class="devicetext" id="commandt">Submit Command: </p>
+                    <select id="commands">
+                        <option value="Shutdown">Shutdown</option>
+                        <option value="Something">Something</option>
+                    </select>
+                </div>
+                <button id="issue">Issue Command</button>
+            </div>
+            <div id="mappane">
+                <img id="map" src="images/map.png"/>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>
