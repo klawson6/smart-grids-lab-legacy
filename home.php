@@ -23,6 +23,10 @@ if (!isset($_SESSION['loggedin'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <script src="js/Chart.js"></script>
+    <link href="css/Chart.css" rel="stylesheet" type="text/css">
+
+    <script src="Home.js"></script>
 </head>
 <body>
 <!--<nav class="navtop">-->
@@ -70,10 +74,41 @@ if (!isset($_SESSION['loggedin'])) {
             <!--                        Voltage graph-->
             <!--                        Power graph-->
             <div class="graph" id="volgraph">
-
+                <canvas id="volgraphcanvas" width="auto" height="auto"></canvas>
+                <script>
+                    new Chart(document.getElementById("volgraphcanvas"), {
+                        type: 'line',
+                        data: {
+                            // labels: [new Date(2019, 6, 19, 11, 6, 1).toTimeString(), new Date(2019, 6, 19, 12, 6, 1).toTimeString(), new Date(2019, 6, 19, 13, 6, 1).toTimeString(), new Date(2019, 6, 19, 14, 6, 1).toTimeString(), new Date(2019, 6, 19, 15, 1, 1).toTimeString()],
+                            labels: ["11:06:01", "12:06:01", "13:06:01", "14:06:01", "15:01:01"],
+                            datasets: [{
+                                data: [{
+                                    x: new Date(2019, 6, 19, 11, 6, 1),
+                                    y: 1812
+                                }, {x: new Date(2019, 6, 19, 12, 6, 1), y: 1304}, {
+                                    x: new Date(2019, 6, 19, 13, 6, 1),
+                                    y: 1293
+                                }, {x: new Date(2019, 6, 19, 14, 6, 1), y: 1277}, {
+                                    x: new Date(2019, 6, 19, 15, 1, 1),
+                                    y: 1270
+                                }],
+                                label: "Battery Voltage",
+                                borderColor: "#3e95cd",
+                                fill: false
+                            }
+                            ]
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'SHS Voltage Data'
+                            }
+                        }
+                    });
+                </script>
             </div>
             <div class="graph" id="powgraph">
-
+                <canvas id="powgraphcanvas" width="auto" height="auto"></canvas>
             </div>
         </div>
         <div id="lowerinfo">
@@ -95,13 +130,13 @@ if (!isset($_SESSION['loggedin'])) {
                     <p class="devicetext">Time Until Command: 3hr 5min</p>
                 </div>
                 <div class="deviceinfotags" id="commandtext">
-                    <p class="devicetext" id="commandt">Submit Command: </p>
+                    <label for="commands" class="devicetext" id="commandt">Issue: </label>
                     <select id="commands">
+                        <option value="" disabled selected>Command</option>
                         <option value="Shutdown">Shutdown</option>
-                        <option value="Something">Something</option>
                     </select>
+                    <button id="issue">Send</button>
                 </div>
-                <button id="issue">Issue Command</button>
             </div>
             <div id="mappane">
                 <img id="map" src="images/map.png"/>
@@ -109,6 +144,5 @@ if (!isset($_SESSION['loggedin'])) {
         </div>
     </div>
 </div>
-
 </body>
 </html>

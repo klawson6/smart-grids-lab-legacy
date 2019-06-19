@@ -138,8 +138,6 @@ body, html {
     height: 88%;
     float: left;
     margin: 1.5%;
-    border-radius: 10px;
-    background-color: black;
 }
 
 #lowerinfo{
@@ -170,16 +168,38 @@ body, html {
 }
 
 #commandt{
-    width: 50%;
+    width: 20%;
     float: left;
+    margin-right: 10%;
 }
 
 #commands{
-    margin: 5px 0 0 0;
+    width: 40%;
     float: left;
+    margin-right: 10%;
+    height: 30px;
+    border-radius: 5px;
+    border-color: #6c757d;
+    border-width: 1px;
+}
+
+#commands:focus{
+    outline: 0;
+}
+
+#issue:focus{
+    outline: 0;
+}
+
+#issue:active{
+    background-color: #6c757d;
 }
 
 #issue{
-    width: 60%;
-    margin: 0 auto;
+    width: 20%;
+    height: 30px;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #6c757d;
 }
