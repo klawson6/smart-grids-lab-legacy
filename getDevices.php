@@ -2,8 +2,7 @@
 /**
  * Created by IntelliJ IDEA.
  * User: kylelawson
- * Date: 6/19/19
- * Time: 3:46 PM
+ * Date: 6/21/19
  */
 session_start();
 
@@ -32,9 +31,7 @@ $dt->setTimestamp($timestamp); // Adjust the object to correct timestamp
 $dt->modify('-4 hours'); // Go back 4 hours for a desired window of values
 $dtSQL = $dt->format('Y-m-d H:i:s'); // Set the format of DateTime
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-if ($stmt = $con->prepare('Select * FROM TEST_BUFER WHERE DateTime >= ? LIMIT 48')) {
-    // Bind parameters. Data types specified by letters
-    $stmt->bind_param('s', $dtSQL);
+if ($stmt = $con->prepare('Select * FROM DeviceInfo')) {
     $stmt->execute();
     // Store the result so we can json encode the data
     $res = $stmt->get_result();

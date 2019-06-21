@@ -78,16 +78,16 @@ if (!isset($_SESSION['loggedin'])) {
                     <hr class="devicebar">
                 </div>
                 <div class="deviceinfotags" id="imei">
-                    <p class="devicetext">IMEI: 123456789</p>
-                </div>
-                <div class="deviceinfotags" id="di">
-                    <p class="devicetext">Lat: 1234 Lng: 6789</p>
+                    <p class="devicetext">IMEI: </p>
                 </div>
                 <div class="deviceinfotags" id="latlng">
-                    <p class="devicetext">Pending Command: Shutdown</p>
+                    <p class="devicetext">Lat:  Lng: </p>
                 </div>
                 <div class="deviceinfotags" id="pendingcmd">
-                    <p class="devicetext">Time Until Command: 3hr 5min</p>
+                    <p class="devicetext">Pending Command: </p>
+                </div>
+                <div class="deviceinfotags" id="tuc">
+                    <p class="devicetext">Time Until Command: </p>
                 </div>
                 <div class="deviceinfotags" id="commandtext">
                     <label for="commands" class="devicetext" id="commandt">Issue: </label>

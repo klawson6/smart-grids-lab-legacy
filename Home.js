@@ -1,25 +1,55 @@
 "use strict"
 
 var view = null;
-var volGraph, powGraph, map;
+var volGraph, powGraph;
+var devices = [];
 
 function Home() {
 
+    var map;
+
     this.init = function () {
-        window.console.log("Jess is always sick.");
         view.initGraphCanvas();
-        view.updateGraphs();
         view.startMap();
+    };
+
+    this.loadPins = function () {
+        $.get("getDevices.php", view.loadPinsCallback, "json");
+    };
+
+    this.loadPinsCallback = function (data) {
+        devices = data;
+        for (var i = 0; i < devices.length; i++) {
+            devices[i].marker = new google.maps.Marker({
+                position: {lat: devices[i].Latitude, lng: devices[i].Longitude},
+                animation: google.maps.Animation.DROP,
+                map: map
+            });
+            devices[i].marker.addListener('click', function () {
+                // TODO
+            });
+
+        }
+        window.console.log(devices);
+    };
+
+    // TODO
+    this.updateData = function (index) {
+        $("#imei").innerHTML = "IMEI: " + devices[index].IMEI;
+        $("#latlng").innerHTML = "Lat: " + devices[index].Latitude + " Lng: " + devices[index].Longitude;
+        $("#pendingcmd").innerHTML = "Pending Command: " + devices[index].Command;
+        $("#tuc").innerHTML = "TODO";
     };
 
     this.startMap = function () {
         navigator.geolocation.getCurrentPosition(function (position) {
             map = new google.maps.Map(document.getElementById("mappane"), {
-                center: {lat: -1.800876, lng: 30.062888},
+                center: {lat: position.coords.latitude, lng: position.coords.longitude},
                 zoom: 14,
                 mapTypeControl: false,
                 streetViewControl: false
             });
+            view.loadPins();
         });
     };
 
@@ -62,13 +92,10 @@ function Home() {
     };
 
     this.updateGraphs = function () {
-        $.get("getLatestData.php", {data: "data"}, view.updateGraphsCallback, "json");
+        $.get("getLatestData.php", view.updateGraphsCallback, "json");
     };
 
     this.updateGraphsCallback = function (data) {
-        // view.drawGraph($("#volgraphcanvas"), view.buildGraphData(data)[0], "Monitor Voltage Measurements", "Voltage / V");
-        // view.drawGraph($("#powgraphcanvas"), view.buildGraphData(data)[1], "Monitor Power Measurements", "Power / W");
-        window.console.log(data);
         var graphData = view.buildGraphData(data);
         volGraph.data.datasets = graphData[0];
         volGraph.update();
@@ -120,7 +147,7 @@ function Home() {
 
         var dt;
         for (var i = 0; i < 48; i++) {
-            if (data[i] !== null && data[i] !== undefined){
+            if (data[i] !== null && data[i] !== undefined) {
                 dt = new Date(data[i].DateTime);
                 rtn[0][0].data[i] = {x: dt, y: data[i].BatteryVoltage / 100};
                 rtn[0][1].data[i] = {x: dt, y: data[i].DistributionVoltage / 100};
@@ -130,40 +157,6 @@ function Home() {
             }
         }
         return rtn;
-    };
-
-
-    this.drawGraph = function (canvas, data, title, type) {
-        window.console.log(data);
-        new Chart(canvas, {
-            type: 'line',
-            data: {
-                datasets: data
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: title
-                },
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    xAxes: [{
-                        type: "time",
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Time - 5mins/4hr"
-                        }
-                    }],
-                    yAxes: [{
-                        scaleLabel: {
-                            display: true,
-                            labelString: type
-                        }
-                    }]
-                }
-            }
-        });
     };
 }
 
