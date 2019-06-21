@@ -7,10 +7,10 @@
  */
 session_start();
 
-//if (!isset($_SESSION['loggedin'])) {
-//    header('Location: login.php');
-//    exit();
-//}
+if (!isset($_SESSION['loggedin'])) {
+    header('Location: index.php');
+    exit();
+}
 
 // Database connection info
 $DATABASE_HOST = 'localhost';
@@ -40,17 +40,17 @@ $dt->setTimestamp($timestamp); // Adjust the object to correct timestamp
 $dt->modify('-4 hours'); // Go back 4 hours for a desired window of values
 $dtSQL = $dt->format('Y-m-d H:i:s'); // Set the format of DateTime
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-if ($stmt = $con->prepare('Select BatteryVoltage FROM TEST_BUFER WHERE DateTime >= ?')) {
+if ($stmt = $con->prepare('Select * FROM TEST_BUFER WHERE DateTime >= ? LIMIT 48')) {
     // Bind parameters. Data types specified by letters
     $stmt->bind_param('s', $dtSQL);
     $stmt->execute();
     // Store the result so we can json encode the data
-    $stmt->store_result();
-    echo $stmt->num_rows;
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($bv); // Set up variable to hold BatteryVoltage results
-        $stmt->fetch(); // Get results
-        echo json_encode($bv);
+    $res = $stmt->get_result();
+    if ($res->num_rows > 0) {
+        while ($row = $res->fetch_assoc()) {
+            $results[] = $row;
+        }
+        echo json_encode($results);
     } else {
         die('No values returned.');
     }

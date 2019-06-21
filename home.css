@@ -136,8 +136,11 @@ body, html {
 .graph{
     width: 47%;
     height: 88%;
+    max-width: 47%;
+    max-height: 88%;
     float: left;
     margin: 1.5%;
+    position: relative;
 }
 
 #lowerinfo{

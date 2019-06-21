@@ -23,25 +23,16 @@ if (!isset($_SESSION['loggedin'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <script src="js/Chart.js"></script>
-    <link href="css/Chart.css" rel="stylesheet" type="text/css">
-
+<!--    <script src="js/Chart.js"></script>-->
+<!--    <link href="css/Chart.css" rel="stylesheet" type="text/css">-->
+<!--    <script src="js/moment.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="js/jquery-3.4.1.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlQsPmRWWEbCLqHpdoseu58mWjODqeIaQ" async defer></script>
     <script src="Home.js"></script>
 </head>
 <body>
-<!--<nav class="navtop">-->
-<!--    <div>-->
-<!--        <h1>Website Title</h1>-->
-<!--        <a href="profile.php"><i class="fas fa-user-circle"></i>Profile</a>-->
-<!--        <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>-->
-<!--    </div>-->
-<!--</nav>-->
-<!--<div id="mappane">-->
-<!--    <img src="images/map.png" id="tempmap">-->
-<!--</div>-->
-<!--<div id="controlpane">-->
-<!--    <p id="filler">Filler</p>-->
-<!--</div>-->
 <div id="toppane">
     <!--    Logo    Admin Dashboard     Log off-->
     <div id="logodiv">
@@ -74,41 +65,10 @@ if (!isset($_SESSION['loggedin'])) {
             <!--                        Voltage graph-->
             <!--                        Power graph-->
             <div class="graph" id="volgraph">
-                <canvas id="volgraphcanvas" width="auto" height="auto"></canvas>
-                <script>
-                    new Chart(document.getElementById("volgraphcanvas"), {
-                        type: 'line',
-                        data: {
-                            // labels: [new Date(2019, 6, 19, 11, 6, 1).toTimeString(), new Date(2019, 6, 19, 12, 6, 1).toTimeString(), new Date(2019, 6, 19, 13, 6, 1).toTimeString(), new Date(2019, 6, 19, 14, 6, 1).toTimeString(), new Date(2019, 6, 19, 15, 1, 1).toTimeString()],
-                            labels: ["11:06:01", "12:06:01", "13:06:01", "14:06:01", "15:01:01"],
-                            datasets: [{
-                                data: [{
-                                    x: new Date(2019, 6, 19, 11, 6, 1),
-                                    y: 1812
-                                }, {x: new Date(2019, 6, 19, 12, 6, 1), y: 1304}, {
-                                    x: new Date(2019, 6, 19, 13, 6, 1),
-                                    y: 1293
-                                }, {x: new Date(2019, 6, 19, 14, 6, 1), y: 1277}, {
-                                    x: new Date(2019, 6, 19, 15, 1, 1),
-                                    y: 1270
-                                }],
-                                label: "Battery Voltage",
-                                borderColor: "#3e95cd",
-                                fill: false
-                            }
-                            ]
-                        },
-                        options: {
-                            title: {
-                                display: true,
-                                text: 'SHS Voltage Data'
-                            }
-                        }
-                    });
-                </script>
+                <canvas id="volgraphcanvas"></canvas>
             </div>
             <div class="graph" id="powgraph">
-                <canvas id="powgraphcanvas" width="auto" height="auto"></canvas>
+                <canvas id="powgraphcanvas"></canvas>
             </div>
         </div>
         <div id="lowerinfo">
@@ -139,7 +99,7 @@ if (!isset($_SESSION['loggedin'])) {
                 </div>
             </div>
             <div id="mappane">
-                <img id="map" src="images/map.png"/>
+<!--                <img id="map" src="images/map.png"/>-->
             </div>
         </div>
     </div>
