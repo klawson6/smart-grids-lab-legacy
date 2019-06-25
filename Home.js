@@ -25,20 +25,25 @@ function Home() {
                 animation: google.maps.Animation.DROP,
                 map: map
             });
-            devices[i].marker.addListener('click', function () {
-                // TODO
-            });
-
+            devices[i].marker.addListener('click', view.updateData(i));
         }
         window.console.log(devices);
     };
 
     // TODO
     this.updateData = function (index) {
-        $("#imei").innerHTML = "IMEI: " + devices[index].IMEI;
-        $("#latlng").innerHTML = "Lat: " + devices[index].Latitude + " Lng: " + devices[index].Longitude;
-        $("#pendingcmd").innerHTML = "Pending Command: " + devices[index].Command;
-        $("#tuc").innerHTML = "TODO";
+        return function () {
+            $("#imei").text("IMEI: " + devices[index].IMEI);
+            $("#latlng").text("Geolocation: " + devices[index].Latitude + ", " + devices[index].Longitude);
+            $("#pendingcmd").text("Pending Command: " + devices[index].Command); // TODO change number to command
+            $("#tuc").text("Time Until Command: " + view.calcTimeDiff(devices[index].LastActivity) + " seconds");
+            view.updateGraphs(devices[index].IMEI);
+            window.console.log(devices[index]);
+        };
+    };
+
+    this.calcTimeDiff = function (time) {
+        return Math.round(Math.abs(new Date().getTime() - new Date(time).getTime())/(60000));
     };
 
     this.startMap = function () {
@@ -47,6 +52,7 @@ function Home() {
                 center: {lat: position.coords.latitude, lng: position.coords.longitude},
                 zoom: 14,
                 mapTypeControl: false,
+                mapTypeId: google.maps.MapTypeId.SATELLITE,
                 streetViewControl: false
             });
             view.loadPins();
@@ -91,15 +97,21 @@ function Home() {
         });
     };
 
-    this.updateGraphs = function () {
-        $.get("getLatestData.php", view.updateGraphsCallback, "json");
+    this.updateGraphs = function (imei) {
+        $.get("getLatestData.php?imei=" + imei, view.updateGraphsCallback, "json");
     };
 
     this.updateGraphsCallback = function (data) {
-        var graphData = view.buildGraphData(data);
-        volGraph.data.datasets = graphData[0];
+        window.console.log(data);
+        if (data.length) {
+            var graphData = view.buildGraphData(data);
+            volGraph.data.datasets = graphData[0];
+            powGraph.data.datasets = graphData[1];
+        } else {
+            volGraph.data.datasets = {};
+            powGraph.data.datasets = {};
+        }
         volGraph.update();
-        powGraph.data.datasets = graphData[1];
         powGraph.update();
     };
 

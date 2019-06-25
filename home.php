@@ -77,17 +77,17 @@ if (!isset($_SESSION['loggedin'])) {
                     <p>DEVICE INFO</p>
                     <hr class="devicebar">
                 </div>
-                <div class="deviceinfotags" id="imei">
-                    <p class="devicetext">IMEI: </p>
+                <div class="deviceinfotags">
+                    <p class="devicetext" id="imei">IMEI: </p>
                 </div>
-                <div class="deviceinfotags" id="latlng">
-                    <p class="devicetext">Lat:  Lng: </p>
+                <div class="deviceinfotags">
+                    <p class="devicetext" id="latlng">Geolocation: </p>
                 </div>
-                <div class="deviceinfotags" id="pendingcmd">
-                    <p class="devicetext">Pending Command: </p>
+                <div class="deviceinfotags">
+                    <p class="devicetext" id="pendingcmd">Pending Command: </p>
                 </div>
-                <div class="deviceinfotags" id="tuc">
-                    <p class="devicetext">Time Until Command: </p>
+                <div class="deviceinfotags">
+                    <p class="devicetext" id="tuc">Time Until Command: </p>
                 </div>
                 <div class="deviceinfotags" id="commandtext">
                     <label for="commands" class="devicetext" id="commandt">Issue: </label>

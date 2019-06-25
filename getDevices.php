@@ -24,12 +24,6 @@ if (mysqli_connect_errno()) {
     die('Failed to connect to MySQL' . mysqli_connect_error());
 }
 
-$tz = 'Europe/London'; // Set timezone
-$timestamp = time(); // Set a variable to hold time
-$dt = new DateTime("now", new DateTimeZone($tz)); // New DateTime variable with today's date
-$dt->setTimestamp($timestamp); // Adjust the object to correct timestamp
-$dt->modify('-4 hours'); // Go back 4 hours for a desired window of values
-$dtSQL = $dt->format('Y-m-d H:i:s'); // Set the format of DateTime
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
 if ($stmt = $con->prepare('Select * FROM DeviceInfo')) {
     $stmt->execute();

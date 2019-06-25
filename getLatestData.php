@@ -12,6 +12,12 @@ if (!isset($_SESSION['loggedin'])) {
     exit();
 }
 
+if(!isset($_GET["imei"]))
+{
+    die('Incorrect request' . mysqli_connect_error());
+}
+$imei = $_GET["imei"];
+
 // Database connection info
 $DATABASE_HOST = 'localhost';
 $DATABASE_USER = 'kylel';
@@ -25,6 +31,13 @@ if (mysqli_connect_errno()) {
     die('Failed to connect to MySQL' . mysqli_connect_error());
 }
 
+$table = "data_" . $imei; // Set name for table of data for the GPRS module that sent data
+
+if (!$con->query("SELECT 1 FROM $table LIMIT 1")) { // Check if a table of data for this GPRS module already exists on the database
+    echo json_encode("");
+    exit(200);
+}
+
 $tz = 'Europe/London'; // Set timezone
 $timestamp = time(); // Set a variable to hold time
 $dt = new DateTime("now", new DateTimeZone($tz)); // New DateTime variable with today's date
@@ -32,7 +45,7 @@ $dt->setTimestamp($timestamp); // Adjust the object to correct timestamp
 $dt->modify('-4 hours'); // Go back 4 hours for a desired window of values
 $dtSQL = $dt->format('Y-m-d H:i:s'); // Set the format of DateTime
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-if ($stmt = $con->prepare('Select * FROM TEST_BUFER WHERE DateTime >= ? LIMIT 48')) {
+if ($stmt = $con->prepare("Select * FROM $table WHERE DateTime >= ? LIMIT 48")) {
     // Bind parameters. Data types specified by letters
     $stmt->bind_param('s', $dtSQL);
     $stmt->execute();
