@@ -4,6 +4,19 @@ var view = null;
 var volGraph, powGraph;
 var devices = [];
 
+// TODO fill with all commands
+var val2cmd = {
+    1: "Disconnect From Network",
+    2: "Disable Power Import"
+};
+
+// TODO fill with all commands
+var cmd2val = {
+    Disconnect: 1,
+    BlockImport: 2
+};
+var browseVal;
+
 function Home() {
 
     var map;
@@ -11,6 +24,19 @@ function Home() {
     this.init = function () {
         view.initGraphCanvas();
         view.startMap();
+        view.initListeners();
+    };
+
+    this.initListeners = function () {
+        $("#issue").on('click', function () {
+            if ($("#commands").val() !== null)
+                $.get("putCommand.php?imei=" + devices[browseVal].IMEI + "&cmd=" + cmd2val[$("#commands").val()], view.issueCallback);
+        });
+    };
+
+    this.issueCallback = function () {
+        devices[browseVal].Command = cmd2val[$("#commands").val()];
+        view.updateData(browseVal)();
     };
 
     this.loadPins = function () {
@@ -27,23 +53,23 @@ function Home() {
             });
             devices[i].marker.addListener('click', view.updateData(i));
         }
-        window.console.log(devices);
     };
 
     // TODO
     this.updateData = function (index) {
         return function () {
+            browseVal = index;
+            $("#commandtext").removeAttr("hidden");
             $("#imei").text("IMEI: " + devices[index].IMEI);
             $("#latlng").text("Geolocation: " + devices[index].Latitude + ", " + devices[index].Longitude);
-            $("#pendingcmd").text("Pending Command: " + devices[index].Command); // TODO change number to command
-            $("#tuc").text("Time Until Command: " + view.calcTimeDiff(devices[index].LastActivity) + " seconds");
+            $("#pendingcmd").text("Pending Command: " + val2cmd[devices[index].Command]);
+            $("#tuc").text("Time Until Command: " + view.calcTimeDiff(devices[index].LastActivity) + " minutes");
             view.updateGraphs(devices[index].IMEI);
-            window.console.log(devices[index]);
         };
     };
 
     this.calcTimeDiff = function (time) {
-        return Math.round(Math.abs(new Date().getTime() - new Date(time).getTime())/(60000));
+        return Math.round(Math.abs(new Date().getTime() - new Date(time).getTime()) / (60000));
     };
 
     this.startMap = function () {
@@ -102,7 +128,6 @@ function Home() {
     };
 
     this.updateGraphsCallback = function (data) {
-        window.console.log(data);
         if (data.length) {
             var graphData = view.buildGraphData(data);
             volGraph.data.datasets = graphData[0];

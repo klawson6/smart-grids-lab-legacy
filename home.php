@@ -78,22 +78,24 @@ if (!isset($_SESSION['loggedin'])) {
                     <hr class="devicebar">
                 </div>
                 <div class="deviceinfotags">
-                    <p class="devicetext" id="imei">IMEI: </p>
+                    <p class="devicetext" id="imei"></p>
                 </div>
                 <div class="deviceinfotags">
-                    <p class="devicetext" id="latlng">Geolocation: </p>
+                    <p class="devicetext" id="latlng">Select an installed monitor on the map.</p>
                 </div>
                 <div class="deviceinfotags">
-                    <p class="devicetext" id="pendingcmd">Pending Command: </p>
+                    <p class="devicetext" id="pendingcmd"></p>
                 </div>
                 <div class="deviceinfotags">
-                    <p class="devicetext" id="tuc">Time Until Command: </p>
+                    <p class="devicetext" id="tuc"></p>
                 </div>
-                <div class="deviceinfotags" id="commandtext">
+                <div class="deviceinfotags" id="commandtext" hidden>
                     <label for="commands" class="devicetext" id="commandt">Issue: </label>
                     <select id="commands">
                         <option value="" disabled selected>Command</option>
-                        <option value="Shutdown">Shutdown</option>
+<!--                        TODO fill with all commands-->
+                        <option value="Disconnect">Disconnect From Network</option>
+                        <option value="BlockImport">Disable Power Import</option>
                     </select>
                     <button id="issue">Send</button>
                 </div>

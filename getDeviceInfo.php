@@ -5,6 +5,8 @@ $username = "kylel";
 $password = "Sgl99Rwanda*";
 $dbname = "smartgridslab";
 
+session_start();
+
 // Create MySQL connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
@@ -29,11 +31,19 @@ switch ($param) {
         $stmt = $conn->prepare("SELECT Command FROM DeviceInfo WHERE IMEI = ?"); // Bind parameters ot avoid data injection
         break;
     case "LastActivity":
+        if (!isset($_SESSION['loggedin'])) {
+            header('Location: index.php');
+            exit();
+        }
         $stmt = $conn->prepare("SELECT LastActivity FROM DeviceInfo WHERE IMEI = ?"); // Bind parameters ot avoid data injection
         break;
-//    case "*":
-//        $stmt = $conn->prepare("SELECT * FROM DeviceInfo WHERE IMEI = ?"); // Bind parameters ot avoid data injection
-//        break;
+    case "*":
+        if (!isset($_SESSION['loggedin'])) {
+            header('Location: index.php');
+            exit();
+        }
+        $stmt = $conn->prepare("SELECT * FROM DeviceInfo WHERE IMEI = ?"); // Bind parameters ot avoid data injection
+        break;
     default:
         die("Request not correct");
 }
@@ -47,10 +57,10 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     // output data of each row
     while ($row = $result->fetch_assoc()) {
-//        if ($param == "*")
-//            echo $row;
-//        else
-        echo $row[$param];
+        if ($param == "*")
+            echo $row;
+        else
+            echo $row[$param];
     }
 } else {
     echo "";
