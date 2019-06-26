@@ -1,6 +1,6 @@
 "use strict"
 
-var view = null;
+var home = null;
 var volGraph, powGraph;
 var devices = [];
 
@@ -15,35 +15,51 @@ var cmd2val = {
     Disconnect: 1,
     BlockImport: 2
 };
-var browseVal;
+var homeVal;
 
 function Home() {
 
     var map;
 
     this.init = function () {
-        view.initGraphCanvas();
-        view.startMap();
-        view.initListeners();
+        // $(".menutags").css({"border-style": "hidden"});
+        home.initGraphCanvas();
+        home.startMap();
+        home.initListeners();
     };
 
     this.initListeners = function () {
         $("#issue").on('click', function () {
             if ($("#commands").val() !== null)
-                $.get("putCommand.php?imei=" + devices[browseVal].IMEI + "&cmd=" + cmd2val[$("#commands").val()], view.issueCallback);
+                $.get("putCommand.php?imei=" + devices[homeVal].IMEI + "&cmd=" + cmd2val[$("#commands").val()], home.issueCallback);
         });
+        $("#browsetag").on('click', home.divSwitch("#browse"));
+        $("#reporttag").on('click', home.divSwitch("#report"));
+        // $(".listItem").on('click', function () {
+        //     $(".listItem").css({"background-color": "#ffffff"});
+        //     $(this).css({"background-color": "rgba(116, 215, 218, 0.28)"});
+        // });
+    };
+
+    this.divSwitch = function (type) {
+        return function () {
+            $(".menutags").css({"border-color": "#3d7679"});
+            $(type+"tag").css({"border-color": "white"});
+            $(".infoPane").css({"display": "none"});
+            $(type+"Div").css({"display": "unset"});
+        };
     };
 
     this.issueCallback = function () {
-        devices[browseVal].Command = cmd2val[$("#commands").val()];
-        view.updateData(browseVal)();
+        devices[homeVal].Command = cmd2val[$("#commands").val()];
+        home.updateData(homeVal)();
     };
 
-    this.loadPins = function () {
-        $.get("getDevices.php", view.loadPinsCallback, "json");
+    this.loadDevices = function () {
+        $.get("getDevices.php", home.loadDevicesCallback, "json");
     };
 
-    this.loadPinsCallback = function (data) {
+    this.loadDevicesCallback = function (data) {
         devices = data;
         for (var i = 0; i < devices.length; i++) {
             devices[i].marker = new google.maps.Marker({
@@ -51,20 +67,27 @@ function Home() {
                 animation: google.maps.Animation.DROP,
                 map: map
             });
-            devices[i].marker.addListener('click', view.updateData(i));
+            devices[i].marker.addListener('click', home.updateData(i));
+            $("#listDiv").append("  <div class=\"listItem\">\n" +
+                "                    <p>" +devices[i].IMEI +"</p>\n" +
+                "                </div>");
         }
+        $(".listItem").on('click', function () {
+            $(".listItem").css({"background-color": "#ffffff"});
+            $(this).css({"background-color": "rgba(116, 215, 218, 0.28)"});
+        });
     };
 
     // TODO
     this.updateData = function (index) {
         return function () {
-            browseVal = index;
+            homeVal = index;
             $("#commandtext").removeAttr("hidden");
             $("#imei").text("IMEI: " + devices[index].IMEI);
             $("#latlng").text("Geolocation: " + devices[index].Latitude + ", " + devices[index].Longitude);
             $("#pendingcmd").text("Pending Command: " + val2cmd[devices[index].Command]);
-            $("#tuc").text("Time Until Command: " + view.calcTimeDiff(devices[index].LastActivity) + " minutes");
-            view.updateGraphs(devices[index].IMEI);
+            $("#tuc").text("Time Until Command: " + home.calcTimeDiff(devices[index].LastActivity) + " minutes");
+            home.updateGraphs(devices[index].IMEI);
         };
     };
 
@@ -81,7 +104,7 @@ function Home() {
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
                 streetViewControl: false
             });
-            view.loadPins();
+            home.loadDevices();
         });
     };
 
@@ -90,8 +113,8 @@ function Home() {
         $("#volgraphcanvas").height = $("#parent").height();
         $("#powgraphcanvas").width = $("#parent").width();
         $("#powgraphcanvas").height = $("#parent").height();
-        volGraph = view.drawGraphTemplate($("#volgraphcanvas"), "Monitor Voltage Measurements", "Voltage / V");
-        powGraph = view.drawGraphTemplate($("#powgraphcanvas"), "Monitor Power Measurements", "Power / W");
+        volGraph = home.drawGraphTemplate($("#volgraphcanvas"), "Monitor Voltage Measurements", "Voltage / V");
+        powGraph = home.drawGraphTemplate($("#powgraphcanvas"), "Monitor Power Measurements", "Power / W");
     };
 
     this.drawGraphTemplate = function (canvas, title, type) {
@@ -124,12 +147,12 @@ function Home() {
     };
 
     this.updateGraphs = function (imei) {
-        $.get("getLatestData.php?imei=" + imei, view.updateGraphsCallback, "json");
+        $.get("getLatestData.php?imei=" + imei, home.updateGraphsCallback, "json");
     };
 
     this.updateGraphsCallback = function (data) {
         if (data.length) {
-            var graphData = view.buildGraphData(data);
+            var graphData = home.buildGraphData(data);
             volGraph.data.datasets = graphData[0];
             powGraph.data.datasets = graphData[1];
         } else {
@@ -197,8 +220,8 @@ function Home() {
     };
 }
 
-view = new Home();
+home = new Home();
 window.addEventListener('load',
     function (ev) {
-        view.init();
+        home.init();
     });

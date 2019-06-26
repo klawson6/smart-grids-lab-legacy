@@ -23,24 +23,30 @@ if (!isset($_SESSION['loggedin'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-<!--    <script src="js/Chart.js"></script>-->
-<!--    <link href="css/Chart.css" rel="stylesheet" type="text/css">-->
-<!--    <script src="js/moment.js"></script>-->
+    <!--    <script src="js/Chart.js"></script>-->
+    <!--    <link href="css/Chart.css" rel="stylesheet" type="text/css">-->
+    <!--    <script src="js/moment.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script src="js/jquery-3.4.1.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlQsPmRWWEbCLqHpdoseu58mWjODqeIaQ" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlQsPmRWWEbCLqHpdoseu58mWjODqeIaQ" async
+            defer></script>
     <script src="Home.js"></script>
+
 </head>
 <body>
 <div id="toppane">
     <!--    Logo    Admin Dashboard     Log off-->
     <div id="logodiv">
+        <a href="home.php">
         <img class="titleicon" id="sglicon" src="images/sgl.png"/>
+        </a>
     </div>
     ADMIN DASHBOARD
     <div id="officondiv">
+        <a href="logout.php">
         <img class="titleicon" id="officon" src="images/officon.png"/>
+        </a>
     </div>
 </div>
 <div id="mainpane">
@@ -52,18 +58,21 @@ if (!isset($_SESSION['loggedin'])) {
         <div class="menutags" id="browsetag">
             <p class="menutext">Browse</p>
         </div>
-        <div class="menutags">
+        <div class="menutags" id="reporttag">
+            <p class="menutext">Individual Reports</p>
+        </div>
+        <div class="menutags" id="addtag">
             <p class="menutext">Add New SGL Monitor</p>
         </div>
         <div class="menutags" id="menuoff">
             <hr class="menubar">
+            <a href="logout.php" style="color: rgb(255,255,255)">
             <p class="menutext">Logout</p>
+            </a>
         </div>
     </div>
-    <div id="infopane">
+    <div class="infoPane" id="browseDiv">
         <div id="graphpane">
-            <!--                        Voltage graph-->
-            <!--                        Power graph-->
             <div class="graph" id="volgraph">
                 <canvas id="volgraphcanvas"></canvas>
             </div>
@@ -93,7 +102,7 @@ if (!isset($_SESSION['loggedin'])) {
                     <label for="commands" class="devicetext" id="commandt">Issue: </label>
                     <select id="commands">
                         <option value="" disabled selected>Command</option>
-<!--                        TODO fill with all commands-->
+                        <!--                        TODO fill with all commands-->
                         <option value="Disconnect">Disconnect From Network</option>
                         <option value="BlockImport">Disable Power Import</option>
                     </select>
@@ -101,10 +110,44 @@ if (!isset($_SESSION['loggedin'])) {
                 </div>
             </div>
             <div id="mappane">
-<!--                <img id="map" src="images/map.png"/>-->
+                <!--                <img id="map" src="images/map.png"/>-->
             </div>
         </div>
     </div>
+    <div class="infoPane" id="reportDiv" style="display:none">
+        <div class="reportTile" id="deviceList">
+            <div id="formDiv">
+                <form action="logout.php">
+                    <input type="text" name="imei" placeholder="IMEI" id="imeiField">
+                    <div id="imeiSearch">
+                        <input type="image" src="images/search.png" alt=" " id="searchIcon">
+                    </div>
+                </form>
+            </div>
+            <div id="listDiv">
+                <div id="listHead">
+                    <p>DEVICE IMEI NUMBERS</p>
+                    <hr class="devicebar">
+                </div>
+<!--                <div class="listItem">-->
+<!--                    <p>123456789123456</p>-->
+<!--                </div>-->
+<!--                <div class="listItem">-->
+<!--                    <p>654321987654321</p>-->
+<!--                </div>-->
+<!--                <div class="listItem">-->
+<!--                    <p>246824682468246</p>-->
+<!--                </div>-->
+<!--                <div class="listItem">-->
+<!--                    <p>135791357913579</p>-->
+<!--                </div>-->
+            </div>
+        </div>
+        <div class="reportTile" id="reportGraphs">
+
+        </div>
+    </div>
+</div>
 </div>
 </body>
 </html>

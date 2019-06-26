@@ -18,11 +18,11 @@ body, html {
     /*font-family: Ubuntu-Regular, sans-serif;*/
 }
 
-.menubar{
+.menubar {
     border-color: white;
 }
 
-.devicebar{
+.devicebar {
     border-color: #000000;
 }
 
@@ -89,7 +89,7 @@ body, html {
     transform: translateY(-37.5px);
 }
 
-#menu{
+#menu {
     height: 100%;
     width: 15%;
     float: left;
@@ -98,42 +98,46 @@ body, html {
     position: relative;
 }
 
-#infopane{
+.infoPane {
     height: 100%;
     width: 85%;
     float: left;
 }
 
-.menutags{
+.menutags {
     width: 80%;
     margin: 15% 10%;
 }
 
-#head{
+#head {
     text-align: center;
 }
 
-#menuoff{
+#menuoff {
     position: absolute;
     bottom: 0;
 }
 
-#browsetag{
+.menutags {
     border-style: solid;
+    border-color: #3d7679;
     border-width: 1px;
+}
+
+#browsetag {
     border-color: white;
 }
 
-.menutext{
+.menutext {
     margin: 3px;
 }
 
-#graphpane{
+#graphpane {
     width: 100%;
     height: 40%;
 }
 
-.graph{
+.graph {
     width: 47%;
     height: 88%;
     max-width: 47%;
@@ -143,19 +147,19 @@ body, html {
     position: relative;
 }
 
-#lowerinfo{
+#lowerinfo {
     width: 100%;
     height: 60%;
 }
 
-#deviceinfo{
+#deviceinfo {
     width: 22%;
     height: 88%;
     float: left;
     margin: 1.5%;
 }
 
-#mappane{
+#mappane {
     width: 72%;
     height: 88%;
     float: left;
@@ -165,18 +169,18 @@ body, html {
     border-radius: 15px;
 }
 
-#map{
+#map {
     max-width: 100%;
     /*border-radius: 15px;*/
 }
 
-#commandt{
+#commandt {
     width: 20%;
     float: left;
     margin-right: 10%;
 }
 
-#commands{
+#commands {
     width: 40%;
     float: left;
     margin-right: 10%;
@@ -186,19 +190,19 @@ body, html {
     border-width: 1px;
 }
 
-#commands:focus{
+#commands:focus {
     outline: 0;
 }
 
-#issue:focus{
+#issue:focus {
     outline: 0;
 }
 
-#issue:active{
+#issue:active {
     background-color: #6c757d;
 }
 
-#issue{
+#issue {
     width: 20%;
     height: 30px;
     border-radius: 5px;
@@ -206,3 +210,79 @@ body, html {
     border-width: 1px;
     border-color: #6c757d;
 }
+
+.reportTile {
+    height: 100%;
+    float: left;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+#deviceList {
+    width: 20%;
+}
+
+#reportGraphs {
+    width: 80%;
+}
+
+#imeiField {
+    width: calc(80% - 10px);
+    height: 30px;
+    margin: 10px 0 10px 10px;
+    float: left;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #122844;
+    text-align: center;
+}
+
+#imeiField:focus, #searchIcon:focus {
+    outline: 0;
+}
+
+#imeiSearch {
+    width: calc(20% - 10px);
+    height: 30px;
+    margin: 10px 10px 10px 0;
+    float: left;
+}
+
+#searchIcon {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#formDiv {
+    width: 100%;
+}
+
+#listDiv {
+    width: 100%;
+}
+
+#listHead {
+    text-align: center;
+    width: 80%;
+    margin: 10%;
+}
+
+.listItem{
+    text-align: center;
+    height: 25px;
+    margin: 10% auto;
+}
+
+.menutags, listItem{
+    user-select: none; /* supported by Chrome and Opera */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+/*BEST COLOUR FOR SELECTION SO FAR*/
+/*#choose{*/
+    /*background-color: rgba(116, 215, 218, 0.28);*/
+/*}*/
