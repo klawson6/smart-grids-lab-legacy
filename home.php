@@ -39,13 +39,13 @@ if (!isset($_SESSION['loggedin'])) {
     <!--    Logo    Admin Dashboard     Log off-->
     <div id="logodiv">
         <a href="home.php">
-        <img class="titleicon" id="sglicon" src="images/sgl.png"/>
+            <img class="titleicon" id="sglicon" src="images/sgl.png"/>
         </a>
     </div>
     ADMIN DASHBOARD
     <div id="officondiv">
         <a href="logout.php">
-        <img class="titleicon" id="officon" src="images/officon.png"/>
+            <img class="titleicon" id="officon" src="images/officon.png"/>
         </a>
     </div>
 </div>
@@ -67,7 +67,7 @@ if (!isset($_SESSION['loggedin'])) {
         <div class="menutags" id="menuoff">
             <hr class="menubar">
             <a href="logout.php" style="color: rgb(255,255,255)">
-            <p class="menutext">Logout</p>
+                <p class="menutext">Logout</p>
             </a>
         </div>
     </div>
@@ -98,7 +98,7 @@ if (!isset($_SESSION['loggedin'])) {
                 <div class="deviceinfotags">
                     <p class="devicetext" id="tuc"></p>
                 </div>
-                <div class="deviceinfotags" id="commandtext" hidden>
+                <div class="deviceinfotags hiddenInfo" id="commandtext" hidden>
                     <label for="commands" class="devicetext" id="commandt">Issue: </label>
                     <select id="commands">
                         <option value="" disabled selected>Command</option>
@@ -106,45 +106,64 @@ if (!isset($_SESSION['loggedin'])) {
                         <option value="Disconnect">Disconnect From Network</option>
                         <option value="BlockImport">Disable Power Import</option>
                     </select>
-                    <button id="issue">Send</button>
+                    <button class="infoButton" id="issue">Send</button>
+                </div>
+                <div class="hiddenInfo" hidden>
+                    <button class="infoButton" id="viewReport">View Full Report</button>
                 </div>
             </div>
             <div id="mappane">
-                <!--                <img id="map" src="images/map.png"/>-->
             </div>
         </div>
     </div>
     <div class="infoPane" id="reportDiv" style="display:none">
         <div class="reportTile" id="deviceList">
             <div id="formDiv">
-                <form action="logout.php">
-                    <input type="text" name="imei" placeholder="IMEI" id="imeiField">
-                    <div id="imeiSearch">
-                        <input type="image" src="images/search.png" alt=" " id="searchIcon">
-                    </div>
-                </form>
+                <input type="text" name="imei" placeholder="IMEI" id="imeiField">
+                <div id="imeiSearch">
+                    <input type="image" src="images/search.png" alt=" " id="searchIcon">
+                </div>
             </div>
             <div id="listDiv">
                 <div id="listHead">
                     <p>DEVICE IMEI NUMBERS</p>
                     <hr class="devicebar">
                 </div>
-<!--                <div class="listItem">-->
-<!--                    <p>123456789123456</p>-->
-<!--                </div>-->
-<!--                <div class="listItem">-->
-<!--                    <p>654321987654321</p>-->
-<!--                </div>-->
-<!--                <div class="listItem">-->
-<!--                    <p>246824682468246</p>-->
-<!--                </div>-->
-<!--                <div class="listItem">-->
-<!--                    <p>135791357913579</p>-->
-<!--                </div>-->
             </div>
         </div>
         <div class="reportTile" id="reportGraphs">
-
+            <div id="filterDiv">
+                <label for="time" id="filterText">Show values from the last: </label>
+                <input type="text" name="time" placeholder="" id="timeField">
+                <select id="units">
+                    <option value="" disabled selected>Unit</option>
+                    <option value="Days">Days</option>
+                    <option value="Houre">Hours</option>
+                    <option value="Minutes">Minutes</option>
+                    <option value="Seconds">Seconds</option>
+                </select>
+                <div id="filterSearch">
+                    <input type="image" src="images/time.png" alt=" " id="searchIcon">
+                </div>
+            </div>
+            <div class="reportGraph" id="bvGraph">
+                <canvas class="reportGraphCanvas" id="bvGraphCanvas"></canvas>
+            </div>
+            <div class="reportGraph" id="piGraph">
+                <canvas class="reportGraphCanvas" id="piGraphCanvas"></canvas>
+            </div>
+            <div class="reportGraph" id="pxGraph">
+                <canvas class="reportGraphCanvas" id="pxGraphCanvas"></canvas>
+            </div>
+            <div class="reportGraph" id="dvGraph">
+                <canvas class="reportGraphCanvas" id="dvGraphCanvas"></canvas>
+            </div>
+            <div class="reportGraph" id="lbGraph">
+                <canvas class="reportGraphCanvas" id="lbGraphCanvas"></canvas>
+            </div>
+            <div class="reportGraph" id="powerGraph">
+                <canvas class="reportGraphCanvas" id="powerGraphCanvas"></canvas>
+            </div>
         </div>
     </div>
 </div>

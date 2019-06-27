@@ -1,7 +1,7 @@
 "use strict"
 
 var home = null;
-var volGraph, powGraph;
+var volGraph, powGraph, bvGraph, piGraph, pxGraph, dvGraph, lbGraph, barGraph;
 var devices = [];
 
 // TODO fill with all commands
@@ -22,7 +22,6 @@ function Home() {
     var map;
 
     this.init = function () {
-        // $(".menutags").css({"border-style": "hidden"});
         home.initGraphCanvas();
         home.startMap();
         home.initListeners();
@@ -33,20 +32,25 @@ function Home() {
             if ($("#commands").val() !== null)
                 $.get("putCommand.php?imei=" + devices[homeVal].IMEI + "&cmd=" + cmd2val[$("#commands").val()], home.issueCallback);
         });
+        $("#viewReport").on('click', function () {
+            home.divSwitch("#report")();
+            $("#list" + devices[homeVal].IMEI).click();
+            $("#deviceList").animate({scrollTop: $("#list" + devices[homeVal].IMEI).offset().top}, 500);
+        });
         $("#browsetag").on('click', home.divSwitch("#browse"));
         $("#reporttag").on('click', home.divSwitch("#report"));
-        // $(".listItem").on('click', function () {
-        //     $(".listItem").css({"background-color": "#ffffff"});
-        //     $(this).css({"background-color": "rgba(116, 215, 218, 0.28)"});
-        // });
+        $("#imeiSearch").on('click', function () {
+            $("#list" + $("#imeiField").val()).click();
+            $("#deviceList").animate({scrollTop: $("#list" + $("#imeiField").val()).offset().top}, 500);
+        });
     };
 
     this.divSwitch = function (type) {
         return function () {
             $(".menutags").css({"border-color": "#3d7679"});
-            $(type+"tag").css({"border-color": "white"});
+            $(type + "tag").css({"border-color": "white"});
             $(".infoPane").css({"display": "none"});
-            $(type+"Div").css({"display": "unset"});
+            $(type + "Div").css({"display": "unset"});
         };
     };
 
@@ -68,13 +72,14 @@ function Home() {
                 map: map
             });
             devices[i].marker.addListener('click', home.updateData(i));
-            $("#listDiv").append("  <div class=\"listItem\">\n" +
-                "                    <p>" +devices[i].IMEI +"</p>\n" +
+            $("#listDiv").append("  <div id=\"list" + devices[i].IMEI + "\" class=\"listItem\">\n" +
+                "                    <p>" + devices[i].IMEI + "</p>\n" +
                 "                </div>");
         }
         $(".listItem").on('click', function () {
             $(".listItem").css({"background-color": "#ffffff"});
             $(this).css({"background-color": "rgba(116, 215, 218, 0.28)"});
+            home.reportGraph($(this).children().text());
         });
     };
 
@@ -82,7 +87,7 @@ function Home() {
     this.updateData = function (index) {
         return function () {
             homeVal = index;
-            $("#commandtext").removeAttr("hidden");
+            $(".hiddenInfo").removeAttr("hidden");
             $("#imei").text("IMEI: " + devices[index].IMEI);
             $("#latlng").text("Geolocation: " + devices[index].Latitude + ", " + devices[index].Longitude);
             $("#pendingcmd").text("Pending Command: " + val2cmd[devices[index].Command]);
@@ -115,6 +120,43 @@ function Home() {
         $("#powgraphcanvas").height = $("#parent").height();
         volGraph = home.drawGraphTemplate($("#volgraphcanvas"), "Monitor Voltage Measurements", "Voltage / V");
         powGraph = home.drawGraphTemplate($("#powgraphcanvas"), "Monitor Power Measurements", "Power / W");
+        $(".reportGraphCanvas").width = $("#parent").width();
+        $(".reportGraphCanvas").height = $("#parent").height();
+        bvGraph = home.drawGraphTemplate($("#bvGraphCanvas"), "Battery Voltage", "Voltage / V");
+        piGraph = home.drawGraphTemplate($("#piGraphCanvas"), "Power Imported", "Power / W");
+        pxGraph = home.drawGraphTemplate($("#pxGraphCanvas"), "Power Exported", "Power / W");
+        dvGraph = home.drawGraphTemplate($("#dvGraphCanvas"), "Distribution Voltage", "Voltage / V");
+        lbGraph = home.drawGraphTemplate($("#lbGraphCanvas"), "Load Busbar", "Voltage / V");
+        barGraph = home.drawBarTemplate($("#powerGraphCanvas"), "Total Power Imported and Exported", "Power / W");
+    };
+
+    this.drawBarTemplate = function (canvas, title, type) {
+        return new Chart(canvas, {
+            type: 'horizontalBar',
+            data: {
+                labels: ["Import", "Export"]
+            },
+            options: {
+                legend: {display: false},
+                title: {
+                    display: true,
+                    text: title
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: type
+                        },
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
     };
 
     this.drawGraphTemplate = function (canvas, title, type) {
@@ -146,6 +188,35 @@ function Home() {
         });
     };
 
+    this.reportGraph = function (imei) {
+        $.get("getLatestData.php?imei=" + imei, home.reportGraphCallback, "json");
+    };
+
+    this.reportGraphCallback = function (data) {
+        if (data.length) {
+            var graphData = home.buildReportData(data);
+            bvGraph.data.datasets = graphData[0];
+            piGraph.data.datasets = graphData[1];
+            pxGraph.data.datasets = graphData[2];
+            dvGraph.data.datasets = graphData[3];
+            lbGraph.data.datasets = graphData[4];
+            barGraph.data.datasets = graphData[5];
+        } else {
+            bvGraph.data.datasets = {};
+            piGraph.data.datasets = {};
+            pxGraph.data.datasets = {};
+            dvGraph.data.datasets = {};
+            lbGraph.data.datasets = {};
+            barGraph.data.datasets = {};
+        }
+        bvGraph.update();
+        piGraph.update();
+        pxGraph.update();
+        dvGraph.update();
+        lbGraph.update();
+        barGraph.update();
+    };
+
     this.updateGraphs = function (imei) {
         $.get("getLatestData.php?imei=" + imei, home.updateGraphsCallback, "json");
     };
@@ -163,12 +234,71 @@ function Home() {
         powGraph.update();
     };
 
-    this.buildGraphData = function (data) {
+    this.buildReportData = function (data) {
         var bv = [48];
         var pi = [48];
         var px = [48];
         var dv = [48];
         var lb = [48];
+        var rtn = [
+            [{
+                data: bv,
+                label: "Battery Voltage",
+                borderColor: "#00cdcc"
+            }],
+            [{
+                data: dv,
+                label: "Power Import",
+                borderColor: "#cdca00"
+            }],
+            [{
+                data: lb,
+                label: "Power Export",
+                borderColor: "#cd00ca"
+            }],
+            [{
+                data: pi,
+                label: "Distribution Voltage",
+                borderColor: "#cd0006"
+            }],
+            [{
+                data: px,
+                label: "Load Busbar",
+                borderColor: "#00cd03"
+            }],
+            [{
+                backgroundColor: ["#3e95cd", "#c45850"],
+                data: [2]
+            }]
+        ];
+
+        var dt;
+        var piSum = 0;
+        var pxSum = 0;
+        for (var i = 0; i < 48; i++) {
+            if (data[i] !== null && data[i] !== undefined) {
+                dt = new Date(data[i].DateTime);
+                rtn[0][0].data[i] = {x: dt, y: data[i].BatteryVoltage / 100};
+                rtn[1][0].data[i] = {x: dt, y: data[i].PowerImport / 100};
+                rtn[2][0].data[i] = {x: dt, y: data[i].PowerExport / 100};
+                rtn[3][0].data[i] = {x: dt, y: data[i].DistributionVoltage / 100};
+                rtn[4][0].data[i] = {x: dt, y: data[i].LoadBusbar / 100};
+                piSum += data[i].PowerImport / 100;
+                pxSum += data[i].PowerExport / 100;
+            }
+        }
+        rtn[5][0].data[0] = piSum;
+        rtn[5][0].data[1] = pxSum;
+        return rtn;
+    };
+
+    this.buildGraphData = function (data) {
+        var size = data.length;
+        var bv = [data.length];
+        var pi = [data.length];
+        var px = [data.length];
+        var dv = [data.length];
+        var lb = [data.length];
         var rtn = [
             [
                 {

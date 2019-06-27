@@ -190,25 +190,30 @@ body, html {
     border-width: 1px;
 }
 
-#commands:focus {
+.infoButton:focus, #commands:focus, #units:focus{
     outline: 0;
 }
 
-#issue:focus {
-    outline: 0;
-}
-
-#issue:active {
+.infoButton:active {
     background-color: #6c757d;
 }
 
 #issue {
     width: 20%;
     height: 30px;
+}
+
+.infoButton{
     border-radius: 5px;
     border-style: solid;
     border-width: 1px;
     border-color: #6c757d;
+}
+
+#viewReport{
+    width: 75%;
+    height: 30px;
+    margin: 12.5%;
 }
 
 .reportTile {
@@ -238,7 +243,37 @@ body, html {
     text-align: center;
 }
 
-#imeiField:focus, #searchIcon:focus {
+#timeField{
+    width: 15%;
+    height: 30px;
+    margin: 10px;
+    float: left;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #122844;
+    text-align: center;
+}
+
+#filterText{
+    width: 20%;
+    height: 30px;
+    margin: 10px;
+    float: left;
+    text-align: center;
+}
+
+#units{
+    width: 15%;
+    float: left;
+    margin: 10px;
+    height: 30px;
+    border-radius: 5px;
+    border-color: #000000;
+    border-width: 1px;
+}
+
+#imeiField:focus, #searchIcon:focus, #timeField{
     outline: 0;
 }
 
@@ -249,9 +284,17 @@ body, html {
     float: left;
 }
 
+#filterSearch{
+    width: 5%;
+    height: 30px;
+    margin: 10px;
+    float: left;
+}
+
 #searchIcon {
     max-width: 100%;
     max-height: 100%;
+    margin-left: 10px;
 }
 
 #formDiv {
@@ -274,7 +317,7 @@ body, html {
     margin: 10% auto;
 }
 
-.menutags, listItem{
+.menutags, .listItem{
     user-select: none; /* supported by Chrome and Opera */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
@@ -282,7 +325,12 @@ body, html {
     -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
-/*BEST COLOUR FOR SELECTION SO FAR*/
-/*#choose{*/
-    /*background-color: rgba(116, 215, 218, 0.28);*/
-/*}*/
+.reportGraph{
+    width: 94%;
+    height: 30%;
+    max-width: 94%;
+    max-height: 30%;
+    /*float: left;*/
+    margin: 3%;
+    position: relative;
+}

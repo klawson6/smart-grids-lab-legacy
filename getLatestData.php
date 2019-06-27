@@ -7,10 +7,10 @@
  */
 session_start();
 
-if (!isset($_SESSION['loggedin'])) {
-    header('Location: index.php');
-    exit();
-}
+//if (!isset($_SESSION['loggedin'])) {
+//    header('Location: index.php');
+//    exit();
+//}
 
 if(!isset($_GET["imei"]))
 {
@@ -45,7 +45,7 @@ $dt->setTimestamp($timestamp); // Adjust the object to correct timestamp
 $dt->modify('-4 hours'); // Go back 4 hours for a desired window of values
 $dtSQL = $dt->format('Y-m-d H:i:s'); // Set the format of DateTime
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-if ($stmt = $con->prepare("Select * FROM $table WHERE DateTime >= ? LIMIT 48")) {
+if ($stmt = $con->prepare("Select * FROM $table")) {
     // Bind parameters. Data types specified by letters
     $stmt->bind_param('s', $dtSQL);
     $stmt->execute();
@@ -57,7 +57,8 @@ if ($stmt = $con->prepare("Select * FROM $table WHERE DateTime >= ? LIMIT 48")) 
         }
         echo json_encode($results);
     } else {
-        die('No values returned.');
+        echo json_encode("");
+        exit(200);
     }
     $stmt->close();
 }
