@@ -133,12 +133,12 @@ if (!isset($_SESSION['loggedin'])) {
         </div>
         <div class="reportTile" id="reportGraphs">
             <div id="filterDiv">
-                <label for="time" id="filterText">Show values from the last: </label>
+                <label for="time" id="filterText">Show recordings from the last: </label>
                 <input type="text" name="time" placeholder="" id="timeField">
                 <select id="units">
                     <option value="" disabled selected>Unit</option>
                     <option value="Days">Days</option>
-                    <option value="Houre">Hours</option>
+                    <option value="Hours">Hours</option>
                     <option value="Minutes">Minutes</option>
                     <option value="Seconds">Seconds</option>
                 </select>
@@ -160,6 +160,20 @@ if (!isset($_SESSION['loggedin'])) {
             </div>
             <div class="reportGraph" id="lbGraph">
                 <canvas class="reportGraphCanvas" id="lbGraphCanvas"></canvas>
+            </div>
+            <div id="filterDivEnergy">
+                <label for="time" id="filterTextEnergy">Show energy exchange for the last: </label>
+                <input type="text" name="time" placeholder="" id="timeFieldEnergy">
+                <select id="unitsEnergy">
+                    <option value="" disabled selected>Unit</option>
+                    <option value="Days">Days</option>
+                    <option value="Hours">Hours</option>
+                    <option value="Minutes">Minutes</option>
+                    <option value="Seconds">Seconds</option>
+                </select>
+                <div id="filterSearchEnergy">
+                    <input type="image" src="images/time.png" alt=" " id="searchIconEnergy">
+                </div>
             </div>
             <div class="reportGraph" id="powerGraph">
                 <canvas class="reportGraphCanvas" id="powerGraphCanvas"></canvas>

@@ -3,6 +3,7 @@
 var home = null;
 var volGraph, powGraph, bvGraph, piGraph, pxGraph, dvGraph, lbGraph, barGraph;
 var devices = [];
+var data;
 
 // TODO fill with all commands
 var val2cmd = {
@@ -43,6 +44,7 @@ function Home() {
             $("#list" + $("#imeiField").val()).click();
             $("#deviceList").animate({scrollTop: $("#list" + $("#imeiField").val()).offset().top}, 500);
         });
+        $("#filterSearch").on('click', home.reportTimescale);
     };
 
     this.divSwitch = function (type) {
@@ -127,7 +129,7 @@ function Home() {
         pxGraph = home.drawGraphTemplate($("#pxGraphCanvas"), "Power Exported", "Power / W");
         dvGraph = home.drawGraphTemplate($("#dvGraphCanvas"), "Distribution Voltage", "Voltage / V");
         lbGraph = home.drawGraphTemplate($("#lbGraphCanvas"), "Load Busbar", "Voltage / V");
-        barGraph = home.drawBarTemplate($("#powerGraphCanvas"), "Total Power Imported and Exported", "Power / W");
+        barGraph = home.drawBarTemplate($("#powerGraphCanvas"), "Total Energy Imported and Exported", "Energy / Whr");
     };
 
     this.drawBarTemplate = function (canvas, title, type) {
@@ -163,6 +165,9 @@ function Home() {
         return new Chart(canvas, {
             type: 'line',
             options: {
+                animation: {
+                    duration: 0
+                },
                 title: {
                     display: true,
                     text: title
@@ -174,7 +179,7 @@ function Home() {
                         type: "time",
                         scaleLabel: {
                             display: true,
-                            labelString: "Time - 5mins/4hr"
+                            labelString: "Time Recorded"
                         }
                     }],
                     yAxes: [{
@@ -209,12 +214,46 @@ function Home() {
             lbGraph.data.datasets = {};
             barGraph.data.datasets = {};
         }
+        var dt = new Date();
+        dt.setHours(dt.getHours() - 4);
+        bvGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+        piGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+        pxGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+        dvGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+        lbGraph.options.scales.xAxes[0].time.min = dt.valueOf();
         bvGraph.update();
         piGraph.update();
         pxGraph.update();
         dvGraph.update();
         lbGraph.update();
         barGraph.update();
+    };
+
+    this.reportTimescale = function () {
+        var time = $("#timeField").val();
+        switch($("#units").val()){
+            case "Minutes":
+                time = time*60;
+                break;
+            case "Hours":
+                time = time*3600;
+                break;
+            case "Days":
+                time = time*86400;
+                break;
+        }
+        var dt = new Date();
+        dt.setSeconds(dt.getSeconds() - time);
+        bvGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+        piGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+        pxGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+        dvGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+        lbGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+        bvGraph.update();
+        piGraph.update();
+        pxGraph.update();
+        dvGraph.update();
+        lbGraph.update();
     };
 
     this.updateGraphs = function (imei) {
@@ -230,16 +269,21 @@ function Home() {
             volGraph.data.datasets = {};
             powGraph.data.datasets = {};
         }
+        var dt = new Date();
+        dt.setHours(dt.getHours() - 4);
+        volGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+        powGraph.options.scales.xAxes[0].time.min = dt.valueOf();
         volGraph.update();
         powGraph.update();
     };
 
     this.buildReportData = function (data) {
-        var bv = [48];
-        var pi = [48];
-        var px = [48];
-        var dv = [48];
-        var lb = [48];
+        var size = data.length;
+        var bv = [size];
+        var pi = [size];
+        var px = [size];
+        var dv = [size];
+        var lb = [size];
         var rtn = [
             [{
                 data: bv,
@@ -273,9 +317,9 @@ function Home() {
         ];
 
         var dt;
-        var piSum = 0;
-        var pxSum = 0;
-        for (var i = 0; i < 48; i++) {
+        var eiSum = 0;
+        var exSum = 0;
+        for (var i = 0; i < size; i++) {
             if (data[i] !== null && data[i] !== undefined) {
                 dt = new Date(data[i].DateTime);
                 rtn[0][0].data[i] = {x: dt, y: data[i].BatteryVoltage / 100};
@@ -283,22 +327,24 @@ function Home() {
                 rtn[2][0].data[i] = {x: dt, y: data[i].PowerExport / 100};
                 rtn[3][0].data[i] = {x: dt, y: data[i].DistributionVoltage / 100};
                 rtn[4][0].data[i] = {x: dt, y: data[i].LoadBusbar / 100};
-                piSum += data[i].PowerImport / 100;
-                pxSum += data[i].PowerExport / 100;
+                eiSum += (data[i].PowerImport / 100)*5;
+                exSum += (data[i].PowerExport / 100)*5;
             }
         }
-        rtn[5][0].data[0] = piSum;
-        rtn[5][0].data[1] = pxSum;
+        eiSum = eiSum/60;
+        exSum = exSum/60;
+        rtn[5][0].data[0] = eiSum;
+        rtn[5][0].data[1] = exSum;
         return rtn;
     };
 
     this.buildGraphData = function (data) {
         var size = data.length;
-        var bv = [data.length];
-        var pi = [data.length];
-        var px = [data.length];
-        var dv = [data.length];
-        var lb = [data.length];
+        var bv = [size];
+        var pi = [size];
+        var px = [size];
+        var dv = [size];
+        var lb = [size];
         var rtn = [
             [
                 {
@@ -336,7 +382,7 @@ function Home() {
             ]];
 
         var dt;
-        for (var i = 0; i < 48; i++) {
+        for (var i = 0; i < size; i++) {
             if (data[i] !== null && data[i] !== undefined) {
                 dt = new Date(data[i].DateTime);
                 rtn[0][0].data[i] = {x: dt, y: data[i].BatteryVoltage / 100};
