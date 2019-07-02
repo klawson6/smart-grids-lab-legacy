@@ -7,14 +7,18 @@ var data;
 
 // TODO fill with all commands
 var val2cmd = {
-    1: "Disconnect From Network",
-    2: "Disable Power Import"
+    0: "Enable Power Import & Export",
+    1: "Disable Power Import",
+    2: "Disable Power Export",
+    3: "Disable Power Import & Export"
 };
 
 // TODO fill with all commands
 var cmd2val = {
-    Disconnect: 1,
-    BlockImport: 2
+    En: 0,
+    Dis1: 1,
+    Dis2: 2,
+    Dis3: 3
 };
 var homeVal;
 

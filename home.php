@@ -42,7 +42,7 @@ if (!isset($_SESSION['loggedin'])) {
             <img class="titleicon" id="sglicon" src="images/sgl.png"/>
         </a>
     </div>
-    ADMIN DASHBOARD
+    SOL-R-US
     <div id="officondiv">
         <a href="logout.php">
             <img class="titleicon" id="officon" src="images/officon.png"/>
@@ -83,8 +83,8 @@ if (!isset($_SESSION['loggedin'])) {
         <div id="lowerinfo">
             <div id="deviceinfo">
                 <div class="deviceinfotags" id="head">
-                    <p>DEVICE INFO</p>
-                    <hr class="devicebar">
+                    <p id="headtag">DEVICE INFO</p>
+                    <hr class="devicebar" id="devicebar">
                 </div>
                 <div class="deviceinfotags">
                     <p class="devicetext" id="imei"></p>
@@ -103,8 +103,10 @@ if (!isset($_SESSION['loggedin'])) {
                     <select id="commands">
                         <option value="" disabled selected>Command</option>
                         <!--                        TODO fill with all commands-->
-                        <option value="Disconnect">Disconnect From Network</option>
-                        <option value="BlockImport">Disable Power Import</option>
+                        <option value="En">Enable Power Import & Export</option>
+                        <option value="Dis1">Disable Power Import</option>
+                        <option value="Dis2">Disable Power Export</option>
+                        <option value="Dis3">Disable Power Import & Export</option>
                     </select>
                     <button class="infoButton" id="issue">Send</button>
                 </div>

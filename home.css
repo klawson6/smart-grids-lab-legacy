@@ -26,6 +26,10 @@ body, html {
     border-color: #000000;
 }
 
+#devicebar{
+    margin: 1.5vh auto;
+}
+
 #toppane {
     width: 100%;
     height: 75px;
@@ -113,6 +117,10 @@ body, html {
     text-align: center;
 }
 
+#headtag{
+    margin: 0 auto 1.5vh auto;
+}
+
 #menuoff {
     position: absolute;
     bottom: 0;
@@ -152,15 +160,19 @@ body, html {
     height: 60%;
 }
 
+.devicetext{
+    margin: 0 auto 1.5vh auto;
+}
+
 #deviceinfo {
-    width: 22%;
+    width: 27%;
     height: 88%;
     float: left;
     margin: 1.5%;
 }
 
 #mappane {
-    width: 72%;
+    width: 67%;
     height: 88%;
     float: left;
     margin: 1.5%;
@@ -213,7 +225,7 @@ body, html {
 #viewReport{
     width: 75%;
     height: 30px;
-    margin: 12.5%;
+    margin: 5% 12.5%;
 }
 
 .reportTile {
