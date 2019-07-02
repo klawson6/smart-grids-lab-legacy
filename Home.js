@@ -170,7 +170,7 @@ function Home() {
             type: 'line',
             options: {
                 animation: {
-                    duration: 0
+                    duration: 1000
                 },
                 title: {
                     display: true,

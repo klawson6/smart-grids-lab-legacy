@@ -268,7 +268,7 @@ body, html {
 }
 
 #filterText, #filterTextEnergy{
-    width: 24%;
+    width: 26%;
     height: 30px;
     margin: 10px;
     float: left;
@@ -335,6 +335,10 @@ body, html {
     -khtml-user-select: none; /* Konqueror HTML */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+.divFilter{
+    height: 7.5vh;
 }
 
 .reportGraph{

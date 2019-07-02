@@ -134,7 +134,7 @@ if (!isset($_SESSION['loggedin'])) {
             </div>
         </div>
         <div class="reportTile" id="reportGraphs">
-            <div id="filterDiv">
+            <div id="filterDiv" class="divFilter">
                 <label for="time" id="filterText">Show recordings from the last: </label>
                 <input type="text" name="time" placeholder="" id="timeField">
                 <select id="units">
@@ -163,7 +163,7 @@ if (!isset($_SESSION['loggedin'])) {
             <div class="reportGraph" id="lbGraph">
                 <canvas class="reportGraphCanvas" id="lbGraphCanvas"></canvas>
             </div>
-            <div id="filterDivEnergy">
+            <div class="divFilter" id="filterDivEnergy">
                 <label for="time" id="filterTextEnergy">Show energy exchange for the last: </label>
                 <input type="text" name="time" placeholder="" id="timeFieldEnergy">
                 <select id="unitsEnergy">
