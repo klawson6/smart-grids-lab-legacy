@@ -1,7 +1,7 @@
 "use strict"
 
 var home = null;
-var volGraph, powGraph, bvGraph, piGraph, pxGraph, dvGraph, lbGraph, barGraph;
+var volGraph, powGraph, bvGraph, piGraph, pxGraph, dvGraph, lbGraph, barGraph, tariffGraph;
 var devices = [];
 var data;
 
@@ -103,7 +103,7 @@ function Home() {
     };
 
     this.calcTimeDiff = function (time) {
-        return Math.round(Math.abs(new Date().getTime() - new Date(time).getTime()) / (60000));
+        return 60 - (Math.round(Math.abs(new Date().getTime() - new Date(time).getTime()) / (60000)));
     };
 
     this.startMap = function () {
@@ -128,15 +128,47 @@ function Home() {
         powGraph = home.drawGraphTemplate($("#powgraphcanvas"), "Monitor Power Measurements", "Power / W");
         $(".reportGraphCanvas").width = $("#parent").width();
         $(".reportGraphCanvas").height = $("#parent").height();
-        bvGraph = home.drawGraphTemplate($("#bvGraphCanvas"), "Battery Voltage", "Voltage / V");
-        piGraph = home.drawGraphTemplate($("#piGraphCanvas"), "Power Imported", "Power / W");
-        pxGraph = home.drawGraphTemplate($("#pxGraphCanvas"), "Power Exported", "Power / W");
-        dvGraph = home.drawGraphTemplate($("#dvGraphCanvas"), "Distribution Voltage", "Voltage / V");
-        lbGraph = home.drawGraphTemplate($("#lbGraphCanvas"), "Load Busbar", "Voltage / V");
-        barGraph = home.drawBarTemplate($("#powerGraphCanvas"), "Total Energy Imported and Exported", "Energy / Whr");
+        bvGraph = home.drawGraphTemplate($("#bvGraphCanvas"), "Battery Voltage", "Voltage - V");
+        piGraph = home.drawGraphTemplate($("#piGraphCanvas"), "Power Imported", "Power - W");
+        pxGraph = home.drawGraphTemplate($("#pxGraphCanvas"), "Power Exported", "Power - W");
+        dvGraph = home.drawGraphTemplate($("#dvGraphCanvas"), "Distribution Voltage", "Voltage - V");
+        lbGraph = home.drawGraphTemplate($("#lbGraphCanvas"), "Load Busbar", "Voltage - V");
+        barGraph = home.drawHorBarTemplate($("#powerGraphCanvas"), "Total Energy Imported and Exported", "Energy - Whr");
+        tariffGraph = home.drawBarTemplate($("#tariffGraphCanvas"), "Monetary Exchange", "Total Transaction per Tariff - RWF");
     };
 
     this.drawBarTemplate = function (canvas, title, type) {
+        return new Chart(canvas, {
+            type: 'bar',
+            data: {
+                labels: [["Tariff 1", "274 RWF/kWh"], ["Tariff 2", "548 RWF/kWh"], ["Tariff 3", "822 RWF/kWh"], ["Tariff 4", "1096 RWF/kWh"]]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: title
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: type
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Amount / RWF"
+                        }
+                    }]
+                }
+            }
+        });
+    };
+
+    this.drawHorBarTemplate = function (canvas, title, type) {
         return new Chart(canvas, {
             type: 'horizontalBar',
             data: {
@@ -170,7 +202,7 @@ function Home() {
             type: 'line',
             options: {
                 animation: {
-                    duration: 1000
+                    duration: 0
                 },
                 title: {
                     display: true,
@@ -199,6 +231,11 @@ function Home() {
 
     this.reportGraph = function (imei) {
         $.get("getLatestData.php?imei=" + imei, home.reportGraphCallback, "json");
+        $.get("getDeviceInfo.php?imei=" + imei + "&param=Balance", home.updateBalCallback, "json");
+    };
+
+    this.updateBalCallback = function (bal) {
+        $("#balVal").text(bal + " RWF");
     };
 
     this.reportGraphCallback = function (data) {
@@ -210,6 +247,7 @@ function Home() {
             dvGraph.data.datasets = graphData[3];
             lbGraph.data.datasets = graphData[4];
             barGraph.data.datasets = graphData[5];
+            tariffGraph.data.datasets = graphData[6];
         } else {
             bvGraph.data.datasets = {};
             piGraph.data.datasets = {};
@@ -217,6 +255,7 @@ function Home() {
             dvGraph.data.datasets = {};
             lbGraph.data.datasets = {};
             barGraph.data.datasets = {};
+            tariffGraph.data.datasets = {};
         }
         var dt = new Date();
         dt.setHours(dt.getHours() - 4);
@@ -231,19 +270,20 @@ function Home() {
         dvGraph.update();
         lbGraph.update();
         barGraph.update();
+        tariffGraph.update();
     };
 
     this.reportTimescale = function () {
         var time = $("#timeField").val();
-        switch($("#units").val()){
+        switch ($("#units").val()) {
             case "Minutes":
-                time = time*60;
+                time = time * 60;
                 break;
             case "Hours":
-                time = time*3600;
+                time = time * 3600;
                 break;
             case "Days":
-                time = time*86400;
+                time = time * 86400;
                 break;
         }
         var dt = new Date();
@@ -315,30 +355,66 @@ function Home() {
                 borderColor: "#00cd03"
             }],
             [{
-                backgroundColor: ["#3e95cd", "#c45850"],
+                backgroundColor: ["#3e95cd", "#c46e11"],
                 data: [2]
-            }]
+            }],
+            [
+                {
+                    label: "Income",
+                    backgroundColor: "#45cd7e",
+                    data: [4]
+                },
+                {
+                    label: "Outgoing",
+                    backgroundColor: "#c41922",
+                    data: [4]
+                }
+            ]
         ];
 
         var dt;
         var eiSum = 0;
         var exSum = 0;
+        var income = [0, 0, 0, 0];
+        var outgoing = [0, 0, 0, 0];
         for (var i = 0; i < size; i++) {
             if (data[i] !== null && data[i] !== undefined) {
                 dt = new Date(data[i].DateTime);
+                var dvTemp = data[i].DistributionVoltage / 100;
                 rtn[0][0].data[i] = {x: dt, y: data[i].BatteryVoltage / 100};
                 rtn[1][0].data[i] = {x: dt, y: data[i].PowerImport / 100};
                 rtn[2][0].data[i] = {x: dt, y: data[i].PowerExport / 100};
-                rtn[3][0].data[i] = {x: dt, y: data[i].DistributionVoltage / 100};
+                rtn[3][0].data[i] = {x: dt, y: dvTemp};
                 rtn[4][0].data[i] = {x: dt, y: data[i].LoadBusbar / 100};
-                eiSum += (data[i].PowerImport / 100)*5;
-                exSum += (data[i].PowerExport / 100)*5;
+                var ei = data[i].PowerImport / 6000;
+                var ex = data[i].PowerExport / 6000;
+                eiSum += ei;
+                exSum += ex;
+                switch (true) {
+                    case (48 <= dvTemp):
+                        income[0] += ei * 0.274;
+                        outgoing[0] += ex * 0.274;
+                        break;
+                    case (46 <= dvTemp && dvTemp < 48):
+                        income[1] += ei * 0.548;
+                        outgoing[1] += ex * 0.548;
+                        break;
+                    case (44 <= dvTemp && dvTemp < 46):
+                        income[2] += ei * 0.822;
+                        outgoing[2] += ex * 0.822;
+                        break;
+                    case (dvTemp < 44):
+                        income[3] += ei * 1.096;
+                        outgoing[3] += ex * 1.096;
+                        break;
+                }
             }
         }
-        eiSum = eiSum/60;
-        exSum = exSum/60;
         rtn[5][0].data[0] = eiSum;
         rtn[5][0].data[1] = exSum;
+
+        rtn[6][0].data = income;
+        rtn[6][1].data = outgoing;
         return rtn;
     };
 

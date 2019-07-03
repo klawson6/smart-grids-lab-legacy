@@ -37,6 +37,13 @@ switch ($param) {
         }
         $stmt = $conn->prepare("SELECT LastActivity FROM DeviceInfo WHERE IMEI = ?"); // Bind parameters ot avoid data injection
         break;
+    case "Balance":
+        if (!isset($_SESSION['loggedin'])) {
+            header('Location: index.php');
+            exit();
+        }
+        $stmt = $conn->prepare("SELECT Balance FROM DeviceInfo WHERE IMEI = ?"); // Bind parameters ot avoid data injection
+        break;
     case "*":
         if (!isset($_SESSION['loggedin'])) {
             header('Location: index.php');

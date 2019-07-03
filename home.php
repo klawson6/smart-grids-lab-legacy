@@ -42,7 +42,7 @@ if (!isset($_SESSION['loggedin'])) {
             <img class="titleicon" id="sglicon" src="images/sgl.png"/>
         </a>
     </div>
-    SOL-R-US
+    ADMIN DASHBOARD
     <div id="officondiv">
         <a href="logout.php">
             <img class="titleicon" id="officon" src="images/officon.png"/>
@@ -179,6 +179,11 @@ if (!isset($_SESSION['loggedin'])) {
             </div>
             <div class="reportGraph" id="powerGraph">
                 <canvas class="reportGraphCanvas" id="powerGraphCanvas"></canvas>
+            </div>
+            <p id="balText" class="bal">Current Balance: </p>
+            <p id="balVal" class="bal"></p>
+            <div class="reportGraph" id="tariffGraph">
+                <canvas class="reportGraphCanvas" id="tariffGraphCanvas"></canvas>
             </div>
         </div>
     </div>

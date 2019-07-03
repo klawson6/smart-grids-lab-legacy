@@ -164,6 +164,11 @@ body, html {
     margin: 0 auto 1.5vh auto;
 }
 
+#balText, #balVal{
+    margin: 0 20px;
+    float: left;
+}
+
 #deviceinfo {
     width: 27%;
     height: 88%;
