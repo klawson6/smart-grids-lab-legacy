@@ -89,7 +89,6 @@ function Home() {
         });
     };
 
-    // TODO
     this.updateData = function (index) {
         return function () {
             homeVal = index;
@@ -128,11 +127,11 @@ function Home() {
         powGraph = home.drawGraphTemplate($("#powgraphcanvas"), "Monitor Power Measurements", "Power / W");
         $(".reportGraphCanvas").width = $("#parent").width();
         $(".reportGraphCanvas").height = $("#parent").height();
-        bvGraph = home.drawGraphTemplate($("#bvGraphCanvas"), "Battery Voltage", "Voltage - V");
-        piGraph = home.drawGraphTemplate($("#piGraphCanvas"), "Power Imported", "Power - W");
-        pxGraph = home.drawGraphTemplate($("#pxGraphCanvas"), "Power Exported", "Power - W");
-        dvGraph = home.drawGraphTemplate($("#dvGraphCanvas"), "Distribution Voltage", "Voltage - V");
-        lbGraph = home.drawGraphTemplate($("#lbGraphCanvas"), "Load Busbar", "Voltage - V");
+        bvGraph = home.drawReportGraphTemplate($("#bvGraphCanvas"), "Battery Voltage", "Voltage - V");
+        piGraph = home.drawReportGraphTemplate($("#piGraphCanvas"), "Power Imported", "Power - W");
+        pxGraph = home.drawReportGraphTemplate($("#pxGraphCanvas"), "Power Exported", "Power - W");
+        dvGraph = home.drawReportGraphTemplate($("#dvGraphCanvas"), "Distribution Voltage", "Voltage - V");
+        lbGraph = home.drawReportGraphTemplate($("#lbGraphCanvas"), "Load Busbar", "Voltage - V");
         barGraph = home.drawHorBarTemplate($("#powerGraphCanvas"), "Total Energy Imported and Exported", "Energy - Whr");
         tariffGraph = home.drawBarTemplate($("#tariffGraphCanvas"), "Monetary Exchange", "Total Transaction per Tariff - RWF");
     };
@@ -197,7 +196,7 @@ function Home() {
         });
     };
 
-    this.drawGraphTemplate = function (canvas, title, type) {
+    this.drawGraphTemplate = function (canvas, title, type, set) {
         return new Chart(canvas, {
             type: 'line',
             options: {
@@ -224,9 +223,103 @@ function Home() {
                             labelString: type
                         }
                     }]
+                },
+                plugins: {
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'x',
+                            onPan: home.rescaleGraphs
+                        },
+                        zoom: {
+                            enabled: true,
+                            mode: 'x',
+                            onZoom: home.rescaleGraphs
+                        }
+                    }
                 }
             }
         });
+    };
+
+    this.drawReportGraphTemplate = function (canvas, title, type, set) {
+        return new Chart(canvas, {
+            type: 'line',
+            options: {
+                animation: {
+                    duration: 0
+                },
+                title: {
+                    display: true,
+                    text: title
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        type: "time",
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Time Recorded"
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: type
+                        }
+                    }]
+                },
+                plugins: {
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'x',
+                            onPan: home.rescaleReportGraphs
+                        },
+                        zoom: {
+                            enabled: true,
+                            mode: 'x',
+                            onZoom: home.rescaleReportGraphs
+                        }
+                    }
+                }
+            }
+        });
+    };
+
+    this.rescaleGraphs = function (chart) {
+        volGraph.options.scales.xAxes[0].time.min = chart.chart.options.scales.xAxes[0].time.min;
+        volGraph.options.scales.xAxes[0].time.max = chart.chart.options.scales.xAxes[0].time.max;
+
+        powGraph.options.scales.xAxes[0].time.min = chart.chart.options.scales.xAxes[0].time.min;
+        powGraph.options.scales.xAxes[0].time.max = chart.chart.options.scales.xAxes[0].time.max;
+
+        volGraph.update();
+        powGraph.update();
+    };
+
+    this.rescaleReportGraphs = function (chart) {
+        bvGraph.options.scales.xAxes[0].time.min = chart.chart.options.scales.xAxes[0].time.min;
+        bvGraph.options.scales.xAxes[0].time.max = chart.chart.options.scales.xAxes[0].time.max;
+
+        piGraph.options.scales.xAxes[0].time.min = chart.chart.options.scales.xAxes[0].time.min;
+        piGraph.options.scales.xAxes[0].time.max = chart.chart.options.scales.xAxes[0].time.max;
+
+        pxGraph.options.scales.xAxes[0].time.min = chart.chart.options.scales.xAxes[0].time.min;
+        pxGraph.options.scales.xAxes[0].time.max = chart.chart.options.scales.xAxes[0].time.max;
+
+        dvGraph.options.scales.xAxes[0].time.min = chart.chart.options.scales.xAxes[0].time.min;
+        dvGraph.options.scales.xAxes[0].time.max = chart.chart.options.scales.xAxes[0].time.max;
+
+        lbGraph.options.scales.xAxes[0].time.min = chart.chart.options.scales.xAxes[0].time.min;
+        lbGraph.options.scales.xAxes[0].time.max = chart.chart.options.scales.xAxes[0].time.max;
+
+        bvGraph.update();
+        piGraph.update();
+        pxGraph.update();
+        dvGraph.update();
+        lbGraph.update();
     };
 
     this.reportGraph = function (imei) {
@@ -239,7 +332,8 @@ function Home() {
     };
 
     this.reportGraphCallback = function (data) {
-        if (data.length) {
+        var size = data.length;
+        if (size) {
             var graphData = home.buildReportData(data);
             bvGraph.data.datasets = graphData[0];
             piGraph.data.datasets = graphData[1];
@@ -248,6 +342,39 @@ function Home() {
             lbGraph.data.datasets = graphData[4];
             barGraph.data.datasets = graphData[5];
             tariffGraph.data.datasets = graphData[6];
+            var dt = new Date();
+            bvGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+            piGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+            pxGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+            dvGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+            lbGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+            bvGraph.options.plugins.zoom.pan.rangeMax = {x: dt.valueOf()};
+            piGraph.options.plugins.zoom.pan.rangeMax = {x: dt.valueOf()};
+            pxGraph.options.plugins.zoom.pan.rangeMax = {x: dt.valueOf()};
+            dvGraph.options.plugins.zoom.pan.rangeMax = {x: dt.valueOf()};
+            lbGraph.options.plugins.zoom.pan.rangeMax = {x: dt.valueOf()};
+            bvGraph.options.plugins.zoom.zoom.rangeMax = {x: dt.valueOf()};
+            piGraph.options.plugins.zoom.zoom.rangeMax = {x: dt.valueOf()};
+            pxGraph.options.plugins.zoom.zoom.rangeMax = {x: dt.valueOf()};
+            dvGraph.options.plugins.zoom.zoom.rangeMax = {x: dt.valueOf()};
+            lbGraph.options.plugins.zoom.zoom.rangeMax = {x: dt.valueOf()};
+            // dt.setHours(dt.getHours() - 4);
+            dt = new Date(data[0].DateTime);
+            bvGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+            piGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+            pxGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+            dvGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+            lbGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+            bvGraph.options.plugins.zoom.pan.rangeMin = {x: dt.valueOf()};
+            piGraph.options.plugins.zoom.pan.rangeMin = {x: dt.valueOf()};
+            pxGraph.options.plugins.zoom.pan.rangeMin = {x: dt.valueOf()};
+            dvGraph.options.plugins.zoom.pan.rangeMin = {x: dt.valueOf()};
+            lbGraph.options.plugins.zoom.pan.rangeMin = {x: dt.valueOf()};
+            bvGraph.options.plugins.zoom.zoom.rangeMin = {x: dt.valueOf()};
+            piGraph.options.plugins.zoom.zoom.rangeMin = {x: dt.valueOf()};
+            pxGraph.options.plugins.zoom.zoom.rangeMin = {x: dt.valueOf()};
+            dvGraph.options.plugins.zoom.zoom.rangeMin = {x: dt.valueOf()};
+            lbGraph.options.plugins.zoom.zoom.rangeMin = {x: dt.valueOf()};
         } else {
             bvGraph.data.datasets = {};
             piGraph.data.datasets = {};
@@ -257,13 +384,6 @@ function Home() {
             barGraph.data.datasets = {};
             tariffGraph.data.datasets = {};
         }
-        var dt = new Date();
-        dt.setHours(dt.getHours() - 4);
-        bvGraph.options.scales.xAxes[0].time.min = dt.valueOf();
-        piGraph.options.scales.xAxes[0].time.min = dt.valueOf();
-        pxGraph.options.scales.xAxes[0].time.min = dt.valueOf();
-        dvGraph.options.scales.xAxes[0].time.min = dt.valueOf();
-        lbGraph.options.scales.xAxes[0].time.min = dt.valueOf();
         bvGraph.update();
         piGraph.update();
         pxGraph.update();
@@ -287,6 +407,11 @@ function Home() {
                 break;
         }
         var dt = new Date();
+        bvGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+        piGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+        pxGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+        dvGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+        lbGraph.options.scales.xAxes[0].time.max = dt.valueOf();
         dt.setSeconds(dt.getSeconds() - time);
         bvGraph.options.scales.xAxes[0].time.min = dt.valueOf();
         piGraph.options.scales.xAxes[0].time.min = dt.valueOf();
@@ -305,18 +430,31 @@ function Home() {
     };
 
     this.updateGraphsCallback = function (data) {
-        if (data.length) {
+        var size = data.length;
+        if (size) {
             var graphData = home.buildGraphData(data);
             volGraph.data.datasets = graphData[0];
             powGraph.data.datasets = graphData[1];
+            // var dt = new Date(data[size-1].DateTime);
+            var dt = new Date();
+            volGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+            powGraph.options.scales.xAxes[0].time.max = dt.valueOf();
+            volGraph.options.plugins.zoom.pan.rangeMax = {x: dt.valueOf()};
+            powGraph.options.plugins.zoom.pan.rangeMax = {x: dt.valueOf()};
+            volGraph.options.plugins.zoom.zoom.rangeMax = {x: dt.valueOf()};
+            powGraph.options.plugins.zoom.zoom.rangeMax = {x: dt.valueOf()};
+            dt.setHours(dt.getHours() - 4);
+            volGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+            powGraph.options.scales.xAxes[0].time.min = dt.valueOf();
+            dt = new Date(data[0].DateTime);
+            volGraph.options.plugins.zoom.pan.rangeMin = {x: dt.valueOf()};
+            powGraph.options.plugins.zoom.pan.rangeMin = {x: dt.valueOf()};
+            volGraph.options.plugins.zoom.zoom.rangeMin = {x: dt.valueOf()};
+            powGraph.options.plugins.zoom.zoom.rangeMin = {x: dt.valueOf()};
         } else {
             volGraph.data.datasets = {};
             powGraph.data.datasets = {};
         }
-        var dt = new Date();
-        dt.setHours(dt.getHours() - 4);
-        volGraph.options.scales.xAxes[0].time.min = dt.valueOf();
-        powGraph.options.scales.xAxes[0].time.min = dt.valueOf();
         volGraph.update();
         powGraph.update();
     };

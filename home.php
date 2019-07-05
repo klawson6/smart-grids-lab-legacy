@@ -26,8 +26,11 @@ if (!isset($_SESSION['loggedin'])) {
     <!--    <script src="js/Chart.js"></script>-->
     <!--    <link href="css/Chart.css" rel="stylesheet" type="text/css">-->
     <!--    <script src="js/moment.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.0"></script>
     <script src="js/jquery-3.4.1.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlQsPmRWWEbCLqHpdoseu58mWjODqeIaQ" async
             defer></script>
@@ -56,7 +59,7 @@ if (!isset($_SESSION['loggedin'])) {
             <hr class="menubar">
         </div>
         <div class="menutags" id="browsetag">
-            <p class="menutext">Browse</p>
+            <p class="menutext">Live Data</p>
         </div>
         <div class="menutags" id="reporttag">
             <p class="menutext">Individual Reports</p>

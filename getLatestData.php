@@ -47,7 +47,7 @@ $dtSQL = $dt->format('Y-m-d H:i:s'); // Set the format of DateTime
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
 if ($stmt = $con->prepare("Select * FROM $table")) {
     // Bind parameters. Data types specified by letters
-    $stmt->bind_param('s', $dtSQL);
+//    $stmt->bind_param('s', $dtSQL);
     $stmt->execute();
     // Store the result so we can json encode the data
     $res = $stmt->get_result();
