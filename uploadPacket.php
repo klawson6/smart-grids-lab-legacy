@@ -59,19 +59,19 @@ if (is_array($bv) && is_array($pi) && is_array($px) && is_array($dv) && is_array
         $dtSQL = $dt->format('Y-m-d H:i:s'); // Set format of time
 
         switch (true) {
-            case (4800 <= $dv[$i]):
+            case (4780 <= $dv[$i]):
                 $income += $pi[$i] * 0.00004567;
                 $outgoing += $px[$i] * 0.0000004567;
                 break;
-            case (4600 <= $dv[$i] && $dv[$i] < 4800):
+            case (4580 <= $dv[$i] && $dv[$i] < 4780):
                 $income += $pi[$i] * 0.00009133;
                 $outgoing += $px[$i] * 0.00009133;
                 break;
-            case (4400 <= $dv[$i] && $dv[$i] < 4600):
+            case (4380 <= $dv[$i] && $dv[$i] < 4580):
                 $income += $pi[$i] * 0.000137;
                 $outgoing += $px[$i] * 0.000137;
                 break;
-            case ($dv[$i] < 4400):
+            case ($dv[$i] < 4380):
                 $income += $pi[$i] * 0.0001826;
                 $outgoing += $px[$i] * 0.0001826;
                 break;

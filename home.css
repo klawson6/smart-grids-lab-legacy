@@ -355,3 +355,33 @@ body, html {
     margin: 3%;
     position: relative;
 }
+
+#energyDiv{
+    width: 94%;
+    height: 65%;
+    max-width: 94%;
+    max-height: 65%;
+    /*float: left;*/
+    margin: 3%;
+    position: relative;
+}
+
+#calendar{
+    max-width: 26%;
+    max-height: 96%;
+    margin: 2%;
+    float: left;
+}
+
+#energyGraphs{
+    width: 66%;
+    height: 96%;
+    margin: 2%;
+    float: left;
+}
+
+.energyGraph{
+    width: 90%;
+    height: 46%;
+    margin: 2% 5%;
+}
