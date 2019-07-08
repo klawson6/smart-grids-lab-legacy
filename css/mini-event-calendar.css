@@ -5,7 +5,7 @@
     user-select: none;
 
     font-family: Verdana, sans-serif;
-    padding-bottom: 1.2em;
+    /*padding-bottom: 0.2em;*/
     background: rgba(116, 215, 218, 0.28);
     color: #000000;
     border-style: solid;

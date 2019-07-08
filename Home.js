@@ -6,7 +6,6 @@ var devices = [];
 var curData;
 var calendar;
 
-// TODO fill with all commands
 var val2cmd = {
     0: "Enable Power Import & Export",
     1: "Disable Power Import",
@@ -14,7 +13,6 @@ var val2cmd = {
     3: "Disable Power Import & Export"
 };
 
-// TODO fill with all commands
 var cmd2val = {
     En: 0,
     Dis1: 1,
@@ -25,12 +23,14 @@ var homeVal;
 
 function Home() {
 
-    var map;
+    var map, addMap;
 
     this.init = function () {
         home.initGraphCanvas();
         home.startMap();
+        home.startMapAdd();
         home.initListeners();
+        $("#calendar").MEC({});
     };
 
     this.initListeners = function () {
@@ -45,11 +45,25 @@ function Home() {
         });
         $("#browsetag").on('click', home.divSwitch("#browse"));
         $("#reporttag").on('click', home.divSwitch("#report"));
+        $("#addtag").on('click', home.divSwitch("#add"));
         $("#imeiSearch").on('click', function () {
             $("#list" + $("#imeiField").val()).click();
             $("#deviceList").animate({scrollTop: $("#list" + $("#imeiField").val()).offset().top}, 500);
         });
-        $("#calendar").MEC({});
+        $("#addDevice").on('click', function () {
+            window.console.log("putDevice.php?imei=" + $("#addIMEI").val() + "&cmd=" + cmd2val[$("#commandsList").val()] + "&lat=" + $("#addLat").val() + "&lng=" + $("#addLng").val());
+            $.get("putDevice.php?imei=" + $("#addIMEI").val() + "&cmd=" + cmd2val[$("#commandsList").val()] + "&lat=" + $("#addLat").val() + "&lng=" + $("#addLng").val(), home.addDeviceCallback);
+        });
+    };
+
+    this.addDeviceCallback = function (data) {
+        window.console.log(data);
+        if (data == null || data == undefined) {
+            $("#submitText").css('color', "red");
+            $("#submitText").text("Incorrect information");
+        } else {
+            window.console.log("HOW");
+        }
     };
 
     this.divSwitch = function (type) {
@@ -116,6 +130,18 @@ function Home() {
                 streetViewControl: false
             });
             home.loadDevices();
+        });
+    };
+
+    this.startMapAdd = function () {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            addMap = new google.maps.Map(document.getElementById("mappane2"), {
+                center: {lat: position.coords.latitude, lng: position.coords.longitude},
+                zoom: 14,
+                mapTypeControl: false,
+                mapTypeId: google.maps.MapTypeId.SATELLITE,
+                streetViewControl: false
+            });
         });
     };
 
@@ -330,6 +356,8 @@ function Home() {
 
     this.updateBalCallback = function (bal) {
         $("#balVal").text(bal + " RWF");
+        var date = new Date();
+        home.changeReportDate(date.getDay(), date.getMonth(), date.getFullYear());
     };
 
     this.reportGraphCallback = function (data) {
@@ -578,6 +606,9 @@ function Home() {
     };
 
     this.changeReportDate = function (day, month, year) {
+        if (curData === undefined || curData === null) {
+            return;
+        }
         var size = curData.length;
         if (size) {
             var eiSum = 0;
@@ -608,8 +639,8 @@ function Home() {
                 var tempDate = new Date(curData[0].DateTime).valueOf();
                 var start = new Date(year, month, day);
                 var end = new Date(year, month, day);
-                end.setHours(23,59,59,999);
-                if(start.valueOf() <= tempDate.valueOf() && tempDate.valueOf() < end.valueOf() ){
+                end.setHours(23, 59, 59, 999);
+                if (start.valueOf() <= tempDate.valueOf() && tempDate.valueOf() < end.valueOf()) {
                     dvTemp = curData[i].DistributionVoltage / 100;
                     var ei = curData[i].PowerImport / 6000;
                     var ex = curData[i].PowerExport / 6000;

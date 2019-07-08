@@ -26,7 +26,7 @@ body, html {
     border-color: #000000;
 }
 
-#devicebar{
+#devicebar {
     margin: 1.5vh auto;
 }
 
@@ -117,7 +117,7 @@ body, html {
     text-align: center;
 }
 
-#headtag{
+#headtag {
     margin: 0 auto 1.5vh auto;
 }
 
@@ -160,11 +160,11 @@ body, html {
     height: 60%;
 }
 
-.devicetext{
+.devicetext {
     margin: 0 auto 1.5vh auto;
 }
 
-#balText, #balVal{
+#balText, #balVal {
     margin: 0 20px;
     float: left;
 }
@@ -207,7 +207,7 @@ body, html {
     border-width: 1px;
 }
 
-.infoButton:focus, #commands:focus, #units:focus, #unitsEnergy:focus{
+.infoButton:focus, #commands:focus, #units:focus, #unitsEnergy:focus {
     outline: 0;
 }
 
@@ -220,14 +220,14 @@ body, html {
     height: 30px;
 }
 
-.infoButton{
+.infoButton {
     border-radius: 5px;
     border-style: solid;
     border-width: 1px;
     border-color: #6c757d;
 }
 
-#viewReport{
+#viewReport {
     width: 75%;
     height: 30px;
     margin: 5% 12.5%;
@@ -260,7 +260,7 @@ body, html {
     text-align: center;
 }
 
-#timeField, #timeFieldEnergy{
+#timeField, #timeFieldEnergy {
     width: 15%;
     height: 30px;
     margin: 10px;
@@ -272,7 +272,7 @@ body, html {
     text-align: center;
 }
 
-#filterText, #filterTextEnergy{
+#filterText, #filterTextEnergy {
     width: 26%;
     height: 30px;
     margin: 10px;
@@ -280,7 +280,7 @@ body, html {
     text-align: center;
 }
 
-#units, #unitsEnergy{
+#units, #unitsEnergy {
     width: 15%;
     float: left;
     margin: 10px;
@@ -290,7 +290,7 @@ body, html {
     border-width: 1px;
 }
 
-#imeiField:focus, #searchIcon:focus, #timeField, #timeFieldEnergy, #searchIconEnergy{
+#imeiField:focus, #searchIcon:focus, #timeField, #timeFieldEnergy, #searchIconEnergy {
     outline: 0;
 }
 
@@ -301,14 +301,14 @@ body, html {
     float: left;
 }
 
-#filterSearch, #filterSearchEnergy{
+#filterSearch, #filterSearchEnergy {
     width: 5%;
     height: 30px;
     margin: 10px;
     float: left;
 }
 
-#searchIcon, #searchIconEnergy{
+#searchIcon, #searchIconEnergy {
     max-width: 100%;
     max-height: 100%;
     margin-left: 10px;
@@ -328,13 +328,13 @@ body, html {
     margin: 10%;
 }
 
-.listItem{
+.listItem {
     text-align: center;
     height: 25px;
     margin: 10% auto;
 }
 
-.menutags, .listItem{
+.menutags, .listItem {
     user-select: none; /* supported by Chrome and Opera */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
@@ -342,11 +342,11 @@ body, html {
     -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
-.divFilter{
+.divFilter {
     height: 7.5vh;
 }
 
-.reportGraph{
+.reportGraph {
     width: 94%;
     height: 30%;
     max-width: 94%;
@@ -356,32 +356,120 @@ body, html {
     position: relative;
 }
 
-#energyDiv{
+#energyDiv {
     width: 94%;
-    height: 65%;
+    height: 90%;
     max-width: 94%;
-    max-height: 65%;
+    max-height: 90%;
     /*float: left;*/
     margin: 3%;
     position: relative;
 }
 
-#calendar{
+#calenderDiv {
     max-width: 26%;
     max-height: 96%;
     margin: 2%;
     float: left;
 }
 
-#energyGraphs{
+#calendar {
+    width: 100%;
+    height: 65%;
+    margin-top: 25%;
+}
+
+#energyGraphs {
     width: 66%;
     height: 96%;
     margin: 2%;
     float: left;
 }
 
-.energyGraph{
+.energyGraph {
     width: 90%;
     height: 46%;
     margin: 2% 5%;
+}
+
+#detailDiv{
+    height: 100%;
+    width: 50%;
+    margin: 1.5% 25%;
+}
+
+#textDiv{
+    width: 100%;
+    height: 40%;
+}
+
+#mappane2{
+    width: 97%;
+    height: 54.5%;
+    margin: 1.5%;
+    overflow: hidden;
+    background-color: black;
+    border-radius: 15px;
+}
+
+#addIMEI{
+    width: 30%;
+    height: 30px;
+    margin: 25px 0 10px 0;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #122844;
+    text-align: center;
+}
+
+#commandsList{
+    width: 30%;
+    height: 30px;
+    margin: 25px 0 10px 0;
+    border-radius: 5px;
+    border-color: #6c757d;
+    border-width: 1px;
+}
+
+#commandsAdd, #imeiLabel{
+    width: 15%;
+    margin: 25px 0 0 5%;
+}
+
+#commandsList:focus, #addIMEI:focus{
+    outline: 0;
+}
+
+#addLng, #addLat{
+    width: 30%;
+    height: 30px;
+    margin: 25px 0 10px 0;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #122844;
+    text-align: center;
+}
+
+#latLabel, #lngLabel{
+    margin: 25px 0 0 5%;
+    width: 15%;
+}
+
+#addDevice{
+    width: 40%;
+    height: 30px;
+    margin: 25px 0 0 30%;
+}
+
+#detailDiv, #geoDiv, #submitDiv{
+    width: 60%;
+    height: 80px;
+    margin: 0 20%;
+}
+
+.addClass{
+    /*text-align: center;*/
+    float: left;
 }

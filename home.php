@@ -22,14 +22,13 @@ if (!isset($_SESSION['loggedin'])) {
     <link href="home.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-     <link rel="stylesheet" type="text/css" href="css/mini-event-calendar.css" />
+    <link rel="stylesheet" type="text/css" href="css/mini-event-calendar.css"/>
 
     <script src="js/jquery-3.4.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.0"></script>
-<!--    <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlQsPmRWWEbCLqHpdoseu58mWjODqeIaQ" async
             defer></script>
     <script src="Home.js"></script>
@@ -37,7 +36,6 @@ if (!isset($_SESSION['loggedin'])) {
 </head>
 <body>
 <div id="toppane">
-    <!--    Logo    Admin Dashboard     Log off-->
     <div id="logodiv">
         <a href="home.php">
             <img class="titleicon" id="sglicon" src="images/sgl.png"/>
@@ -163,24 +161,12 @@ if (!isset($_SESSION['loggedin'])) {
             <div class="reportGraph" id="lbGraph">
                 <canvas class="reportGraphCanvas" id="lbGraphCanvas"></canvas>
             </div>
-            <!--            <div class="divFilter" id="filterDivEnergy">-->
-            <!--                <label for="time" id="filterTextEnergy">Show energy exchange for the last: </label>-->
-            <!--                <input type="text" name="time" placeholder="" id="timeFieldEnergy">-->
-            <!--                <select id="unitsEnergy">-->
-            <!--                    <option value="" disabled selected>Unit</option>-->
-            <!--                    <option value="Days">Days</option>-->
-            <!--                    <option value="Hours">Hours</option>-->
-            <!--                    <option value="Minutes">Minutes</option>-->
-            <!--                    <option value="Seconds">Seconds</option>-->
-            <!--                </select>-->
-            <!--                <div id="filterSearchEnergy">-->
-            <!--                    <input type="image" src="images/time.png" alt=" " id="searchIconEnergy">-->
-            <!--                </div>-->
-            <!--            </div>-->
             <div id="energyDiv">
-<!--                <p id="balText" class="bal">Current Balance: </p>-->
-<!--                <p id="balVal" class="bal"></p>-->
-                <div id="calendar"></div>
+                <div id="calenderDiv">
+                    <p id="balText" class="bal">Current Balance: </p>
+                    <p id="balVal" class="bal"></p>
+                    <div id="calendar"></div>
+                </div>
                 <div id="energyGraphs">
                     <div class="energyGraph" id="powerGraph">
                         <canvas class="reportGraphCanvas" id="powerGraphCanvas"></canvas>
@@ -191,6 +177,34 @@ if (!isset($_SESSION['loggedin'])) {
                 </div>
             </div>
 
+        </div>
+    </div>
+    <div class="infoPane" id="addDiv" style="display:none">
+        <div id="textDiv">
+            <div id="detailDiv">
+                <label for="imei" id="imeiLabel" class="addClass">IMEI: </label>
+                <input type="text" name="imei" placeholder="IMEI" id="addIMEI" class="addClass">
+                <label for="commands" class="addClass" id="commandsAdd">Command: </label>
+                <select id="commandsList" class="addClass">
+                    <option value="" disabled selected>Command</option>
+                    <option value="En">Enable Power Import & Export</option>
+                    <option value="Dis1">Disable Power Import</option>
+                    <option value="Dis2">Disable Power Export</option>
+                    <option value="Dis3">Disable Power Import & Export</option>
+                </select>
+            </div>
+            <div id="geoDiv">
+                <label for="lat" id="latLabel" class="addClass">Latitude: </label>
+                <input type="text" name="lat" placeholder="Latitude" id="addLat" class="addClass">
+                <label for="lng" id="lngLabel" class="addClass">Longitude: </label>
+                <input type="text" name="lng" placeholder="Longitude" id="addLng" class="addClass">
+            </div>
+            <div id="submitDiv">
+                <button class="infoButton" id="addDevice">Add Device</button>
+                <span id="submitText"></span>
+            </div>
+        </div>
+        <div id="mappane2">
         </div>
     </div>
 </div>
