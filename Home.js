@@ -51,19 +51,29 @@ function Home() {
             $("#deviceList").animate({scrollTop: $("#list" + $("#imeiField").val()).offset().top}, 500);
         });
         $("#addDevice").on('click', function () {
-            window.console.log("putDevice.php?imei=" + $("#addIMEI").val() + "&cmd=" + cmd2val[$("#commandsList").val()] + "&lat=" + $("#addLat").val() + "&lng=" + $("#addLng").val());
             $.get("putDevice.php?imei=" + $("#addIMEI").val() + "&cmd=" + cmd2val[$("#commandsList").val()] + "&lat=" + $("#addLat").val() + "&lng=" + $("#addLng").val(), home.addDeviceCallback);
         });
     };
 
     this.addDeviceCallback = function (data) {
-        window.console.log(data);
-        if (data == null || data == undefined) {
-            $("#submitText").css('color', "red");
-            $("#submitText").text("Incorrect information");
-        } else {
-            window.console.log("HOW");
+        switch (data) {
+            case "0" :
+                $("#submitText").css('color', "red");
+                $("#submitText").text("Invalid information!!");
+                break;
+            case "1":
+                $("#submitText").css('color', "green");
+                $("#submitText").text("Submitted!");
+                home.loadDevices();
+                break;
+            case "2":
+                $("#submitText").css('color', "orange");
+                $("#submitText").text("IMEI number already in use!");
+                break;
         }
+        setTimeout(function () {
+            $("#submitText").text("");
+        }, 3000);
     };
 
     this.divSwitch = function (type) {
@@ -141,6 +151,11 @@ function Home() {
                 mapTypeControl: false,
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
                 streetViewControl: false
+            });
+
+            google.maps.event.addListener(addMap,'click',function(event) {
+                $("#addLat").val(event.latLng.lat());
+                $("#addLng").val(event.latLng.lng());
             });
         });
     };

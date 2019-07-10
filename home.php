@@ -41,7 +41,7 @@ if (!isset($_SESSION['loggedin'])) {
             <img class="titleicon" id="sglicon" src="images/sgl.png"/>
         </a>
     </div>
-    ADMIN DASHBOARD
+    SGL MONITOR
     <div id="officondiv">
         <a href="logout.php">
             <img class="titleicon" id="officon" src="images/officon.png"/>
