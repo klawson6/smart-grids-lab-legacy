@@ -41,12 +41,12 @@ if (!isset($_SESSION['loggedin'])) {
             <img class="titleicon" id="sglicon" src="images/sgl.png"/>
         </a>
     </div>
-    SGL MONITOR
-    <div id="officondiv">
-        <a href="logout.php">
-            <img class="titleicon" id="officon" src="images/officon.png"/>
-        </a>
-    </div>
+    <span id="titletext">SGL MONITOR</span>
+<!--    <div id="officondiv">-->
+<!--        <a href="logout.php">-->
+<!--            <img class="titleicon" id="officon" src="images/officon.png"/>-->
+<!--        </a>-->
+<!--    </div>-->
 </div>
 <div id="mainpane">
     <div id="menu">
@@ -55,16 +55,20 @@ if (!isset($_SESSION['loggedin'])) {
             <hr class="menubar">
         </div>
         <div class="menutags" id="browsetag">
+            <img class="tagImg" src="images/globe.png">
             <p class="menutext">Live Data</p>
         </div>
         <div class="menutags" id="reporttag">
+            <img class="tagImg" src="images/graph.png">
             <p class="menutext">Individual Reports</p>
         </div>
         <div class="menutags" id="addtag">
-            <p class="menutext">Add New SGL Monitor</p>
+            <img class="tagImg" src="images/add.png">
+            <p class="menutext">New SGL Monitor</p>
         </div>
         <div class="menutags" id="menuoff">
             <hr class="menubar">
+            <img class="tagImg" src="images/officon.png">
             <a href="logout.php" style="color: rgb(255,255,255)">
                 <p class="menutext">Logout</p>
             </a>
@@ -146,21 +150,6 @@ if (!isset($_SESSION['loggedin'])) {
                     <input type="image" src="images/time.png" alt=" " id="searchIcon">
                 </div>
             </div>
-            <div class="reportGraph" id="bvGraph">
-                <canvas class="reportGraphCanvas" id="bvGraphCanvas"></canvas>
-            </div>
-            <div class="reportGraph" id="piGraph">
-                <canvas class="reportGraphCanvas" id="piGraphCanvas"></canvas>
-            </div>
-            <div class="reportGraph" id="pxGraph">
-                <canvas class="reportGraphCanvas" id="pxGraphCanvas"></canvas>
-            </div>
-            <div class="reportGraph" id="dvGraph">
-                <canvas class="reportGraphCanvas" id="dvGraphCanvas"></canvas>
-            </div>
-            <div class="reportGraph" id="lbGraph">
-                <canvas class="reportGraphCanvas" id="lbGraphCanvas"></canvas>
-            </div>
             <div id="energyDiv">
                 <div id="calenderDiv">
                     <p id="balText" class="bal">Current Balance: </p>
@@ -176,7 +165,21 @@ if (!isset($_SESSION['loggedin'])) {
                     </div>
                 </div>
             </div>
-
+            <div class="reportGraph" id="bvGraph">
+                <canvas class="reportGraphCanvas" id="bvGraphCanvas"></canvas>
+            </div>
+            <div class="reportGraph" id="piGraph">
+                <canvas class="reportGraphCanvas" id="piGraphCanvas"></canvas>
+            </div>
+            <div class="reportGraph" id="pxGraph">
+                <canvas class="reportGraphCanvas" id="pxGraphCanvas"></canvas>
+            </div>
+            <div class="reportGraph" id="dvGraph">
+                <canvas class="reportGraphCanvas" id="dvGraphCanvas"></canvas>
+            </div>
+            <div class="reportGraph" id="lbGraph">
+                <canvas class="reportGraphCanvas" id="lbGraphCanvas"></canvas>
+            </div>
         </div>
     </div>
     <div class="infoPane" id="addDiv" style="display:none">

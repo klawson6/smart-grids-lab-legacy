@@ -53,6 +53,7 @@ function Home() {
         $("#addDevice").on('click', function () {
             $.get("putDevice.php?imei=" + $("#addIMEI").val() + "&cmd=" + cmd2val[$("#commandsList").val()] + "&lat=" + $("#addLat").val() + "&lng=" + $("#addLng").val(), home.addDeviceCallback);
         });
+        $("#filterSearch").on('click', home.reportTimescale);
     };
 
     this.addDeviceCallback = function (data) {
@@ -401,8 +402,8 @@ function Home() {
             pxGraph.options.plugins.zoom.zoom.rangeMax = {x: dt.valueOf()};
             dvGraph.options.plugins.zoom.zoom.rangeMax = {x: dt.valueOf()};
             lbGraph.options.plugins.zoom.zoom.rangeMax = {x: dt.valueOf()};
-            // dt.setHours(dt.getHours() - 4);
-            dt = new Date(data[0].DateTime);
+            dt.setHours(dt.getHours()-24);
+            if (dt.valueOf() < new Date(data[0].DateTime).valueOf()) {dt = new Date(data[0].DateTime);}
             bvGraph.options.scales.xAxes[0].time.min = dt.valueOf();
             piGraph.options.scales.xAxes[0].time.min = dt.valueOf();
             pxGraph.options.scales.xAxes[0].time.min = dt.valueOf();

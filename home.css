@@ -40,6 +40,7 @@ body, html {
     background-color: #122844;
 }
 
+
 #mainpane {
     width: 100%;
     height: calc(100vh - 75px);
@@ -51,7 +52,16 @@ body, html {
     display: table-cell;
     /*padding: 0;*/
     float: left;
-    margin: 7.5px 0 7.5px 0;
+    margin: 7.5px 0 7.5px 5px;
+}
+
+
+#titletext{
+    height: 60px;
+    width: 33.33%;
+    display: table-cell;
+    float: left;
+    font-size: 3rem;
 }
 
 #officondiv {
@@ -95,7 +105,8 @@ body, html {
 
 #menu {
     height: 100%;
-    width: 15%;
+    min-width: 15%;
+    max-width: 15%;
     float: left;
     background-color: #3d7679;
     color: white;
@@ -106,6 +117,7 @@ body, html {
     height: 100%;
     width: 85%;
     float: left;
+    overflow: hidden;
 }
 
 .menutags {
@@ -137,7 +149,14 @@ body, html {
 }
 
 .menutext {
+    margin: 1px 3px;
+    display: inline;
+    position: absolute;
+}
+
+.tagImg {
     margin: 3px;
+    width: 12.5%;
 }
 
 #graphpane {
@@ -375,7 +394,7 @@ body, html {
 
 #calendar {
     width: 100%;
-    height: 65%;
+    max-height: 65%;
     margin-top: 25%;
 }
 
@@ -392,18 +411,18 @@ body, html {
     margin: 2% 5%;
 }
 
-#detailDiv{
+#detailDiv {
     height: 100%;
     width: 50%;
     margin: 1.5% 25%;
 }
 
-#textDiv{
+#textDiv {
     width: 100%;
     height: 40%;
 }
 
-#mappane2{
+#mappane2 {
     width: 97%;
     height: 54.5%;
     margin: 1.5%;
@@ -412,7 +431,7 @@ body, html {
     border-radius: 15px;
 }
 
-#addIMEI{
+#addIMEI {
     width: 30%;
     height: 30px;
     margin: 25px 0 10px 0;
@@ -423,7 +442,7 @@ body, html {
     text-align: center;
 }
 
-#commandsList{
+#commandsList {
     width: 30%;
     height: 30px;
     margin: 25px 0 10px 0;
@@ -432,16 +451,16 @@ body, html {
     border-width: 1px;
 }
 
-#commandsAdd, #imeiLabel{
+#commandsAdd, #imeiLabel {
     width: 15%;
     margin: 25px 0 0 5%;
 }
 
-#commandsList:focus, #addIMEI:focus, #addLat:focus, #addLng:focus{
+#commandsList:focus, #addIMEI:focus, #addLat:focus, #addLng:focus {
     outline: 0;
 }
 
-#addLng, #addLat{
+#addLng, #addLat {
     width: 30%;
     height: 30px;
     margin: 25px 0 10px 0;
@@ -452,24 +471,24 @@ body, html {
     text-align: center;
 }
 
-#latLabel, #lngLabel{
+#latLabel, #lngLabel {
     margin: 25px 0 0 5%;
     width: 15%;
 }
 
-#addDevice{
+#addDevice {
     width: 40%;
     height: 30px;
     margin: 25px 0 0 30%;
 }
 
-#detailDiv, #geoDiv, #submitDiv{
+#detailDiv, #geoDiv, #submitDiv {
     width: 60%;
     height: 80px;
     margin: 0 20%;
 }
 
-.addClass{
+.addClass {
     /*text-align: center;*/
     float: left;
 }

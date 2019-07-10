@@ -21,7 +21,7 @@ $tz = 'Europe/London'; // Set timezone
 $timestamp = time(); // Init new time obj
 $dt = new DateTime("now", new DateTimeZone($tz)); // Set DateTime to now in the set timezone
 $dt->setTimestamp($timestamp); // Set DateTime to only a time obj
-$dt->modify('-1 hours'); // Move back the time obj by 4 hours to compensate for data sampling over time in the incoming packet
+$dt->modify('-10 minutes'); // Move back the time obj by 4 hours to compensate for data sampling over time in the incoming packet
 $dtSQL = $dt->format('Y-m-d H:i:s'); // Set time format
 //echo $dtSQL;
 
