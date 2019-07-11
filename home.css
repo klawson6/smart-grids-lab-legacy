@@ -183,10 +183,6 @@ body, html {
     margin: 0 auto 1.5vh auto;
 }
 
-#balText, #balVal {
-    margin: 0 20px;
-    float: left;
-}
 
 #deviceinfo {
     width: 27%;
@@ -279,7 +275,7 @@ body, html {
     text-align: center;
 }
 
-#timeField, #timeFieldEnergy {
+#timeField {
     width: 15%;
     height: 30px;
     margin: 10px;
@@ -291,15 +287,15 @@ body, html {
     text-align: center;
 }
 
-#filterText, #filterTextEnergy {
+#filterText{
     width: 26%;
     height: 30px;
-    margin: 10px;
+    margin: 10px 10px 10px 15%;
     float: left;
     text-align: center;
 }
 
-#units, #unitsEnergy {
+#units{
     width: 15%;
     float: left;
     margin: 10px;
@@ -309,7 +305,7 @@ body, html {
     border-width: 1px;
 }
 
-#imeiField:focus, #searchIcon:focus, #timeField, #timeFieldEnergy, #searchIconEnergy {
+#imeiField:focus, #searchIcon:focus, #timeField {
     outline: 0;
 }
 
@@ -320,14 +316,14 @@ body, html {
     float: left;
 }
 
-#filterSearch, #filterSearchEnergy {
+#filterSearch {
     width: 5%;
     height: 30px;
     margin: 10px;
     float: left;
 }
 
-#searchIcon, #searchIconEnergy {
+#searchIcon {
     max-width: 100%;
     max-height: 100%;
     margin-left: 10px;
@@ -377,38 +373,51 @@ body, html {
 
 #energyDiv {
     width: 94%;
-    height: 90%;
+    height: 70%;
     max-width: 94%;
-    max-height: 90%;
+    max-height: 70%;
     /*float: left;*/
     margin: 3%;
     position: relative;
 }
 
-#calenderDiv {
-    max-width: 26%;
-    max-height: 96%;
-    margin: 2%;
-    float: left;
-}
-
-#calendar {
+.energyGraph{
     width: 100%;
-    max-height: 65%;
-    margin-top: 25%;
-}
-
-#energyGraphs {
-    width: 66%;
-    height: 96%;
-    margin: 2%;
+    height: 50%;
+    margin: 0;
     float: left;
 }
 
-.energyGraph {
-    width: 90%;
-    height: 46%;
-    margin: 2% 5%;
+#energyTop, #tariffGraph{
+    width: 100%;
+    height: 50%;
+    margin: 0;
+}
+
+#powerGraph{
+    height: 100%;
+    width: 65%;
+    margin: 0;
+    float: left;
+}
+
+#energyInfo{
+    height: 80%;
+    width: 35%;
+    margin: 0;
+    top: 15%;
+    float: left;
+    position: relative;
+}
+
+#dateChoose{
+    width: 35%;
+    margin: 10px 10%;
+}
+
+.energyInfoLine{
+    margin: 10px 10%;
+    min-width: 80%;
 }
 
 #detailDiv {

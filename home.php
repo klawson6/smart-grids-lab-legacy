@@ -19,10 +19,10 @@ if (!isset($_SESSION['loggedin'])) {
     <meta charset="utf-8">
     <title>Home Page</title>
     <link rel="icon" href="images/icon.png"/>
-    <link href="home.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/mini-event-calendar.css"/>
+    <link rel="stylesheet" href="css/datepicker.min.css">
+    <link href="home.css" rel="stylesheet" type="text/css">
 
     <script src="js/jquery-3.4.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
@@ -31,8 +31,8 @@ if (!isset($_SESSION['loggedin'])) {
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.0"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlQsPmRWWEbCLqHpdoseu58mWjODqeIaQ" async
             defer></script>
+    <script src="js/datepicker.min.js"></script>
     <script src="Home.js"></script>
-    <script src="js/mini-event-calendar.js"></script>
 </head>
 <body>
 <div id="toppane">
@@ -42,11 +42,11 @@ if (!isset($_SESSION['loggedin'])) {
         </a>
     </div>
     <span id="titletext">SGL MONITOR</span>
-<!--    <div id="officondiv">-->
-<!--        <a href="logout.php">-->
-<!--            <img class="titleicon" id="officon" src="images/officon.png"/>-->
-<!--        </a>-->
-<!--    </div>-->
+    <!--    <div id="officondiv">-->
+    <!--        <a href="logout.php">-->
+    <!--            <img class="titleicon" id="officon" src="images/officon.png"/>-->
+    <!--        </a>-->
+    <!--    </div>-->
 </div>
 <div id="mainpane">
     <div id="menu">
@@ -150,21 +150,6 @@ if (!isset($_SESSION['loggedin'])) {
                     <input type="image" src="images/time.png" alt=" " id="searchIcon">
                 </div>
             </div>
-            <div id="energyDiv">
-                <div id="calenderDiv">
-                    <p id="balText" class="bal">Current Balance: </p>
-                    <p id="balVal" class="bal"></p>
-                    <div id="calendar"></div>
-                </div>
-                <div id="energyGraphs">
-                    <div class="energyGraph" id="powerGraph">
-                        <canvas class="reportGraphCanvas" id="powerGraphCanvas"></canvas>
-                    </div>
-                    <div class="energyGraph" id="tariffGraph">
-                        <canvas class="reportGraphCanvas" id="tariffGraphCanvas"></canvas>
-                    </div>
-                </div>
-            </div>
             <div class="reportGraph" id="bvGraph">
                 <canvas class="reportGraphCanvas" id="bvGraphCanvas"></canvas>
             </div>
@@ -179,6 +164,27 @@ if (!isset($_SESSION['loggedin'])) {
             </div>
             <div class="reportGraph" id="lbGraph">
                 <canvas class="reportGraphCanvas" id="lbGraphCanvas"></canvas>
+            </div>
+            <div id="energyDiv">
+                <div id="energyTop">
+                    <div id="powerGraph">
+                        <canvas class="reportGraphCanvas" id="powerGraphCanvas"></canvas>
+                    </div>
+                    <div id="energyInfo">
+                        <div class="energyInfoLine">
+                            <span id="balText">Balance: </span>
+                            <span id="balVal"></span>
+                        </div>
+                        <div class="energyInfoLine">
+                            <span id="dateShownText">Energy exchange for: </span>
+                            <span id="dateShownVal"></span>
+                        </div>
+                        <button class="infoButton" id="dateChoose">Select Date</button>
+                    </div>
+                </div>
+                <div id="tariffGraph">
+                    <canvas class="reportGraphCanvas" id="tariffGraphCanvas"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -212,5 +218,7 @@ if (!isset($_SESSION['loggedin'])) {
     </div>
 </div>
 </div>
+
+
 </body>
 </html>

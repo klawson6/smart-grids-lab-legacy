@@ -21,6 +21,8 @@ var cmd2val = {
 };
 var homeVal;
 
+var picker;
+
 function Home() {
 
     var map, addMap;
@@ -30,7 +32,6 @@ function Home() {
         home.startMap();
         home.startMapAdd();
         home.initListeners();
-        $("#calendar").MEC({});
     };
 
     this.initListeners = function () {
@@ -54,6 +55,7 @@ function Home() {
             $.get("putDevice.php?imei=" + $("#addIMEI").val() + "&cmd=" + cmd2val[$("#commandsList").val()] + "&lat=" + $("#addLat").val() + "&lng=" + $("#addLng").val(), home.addDeviceCallback);
         });
         $("#filterSearch").on('click', home.reportTimescale);
+        picker = datepicker("#dateChoose", { onSelect: (instance, date) => {home.changeReportDate(date, date.getDay(), date.getMonth(), date.getFullYear())();}});
     };
 
     this.addDeviceCallback = function (data) {
@@ -372,8 +374,6 @@ function Home() {
 
     this.updateBalCallback = function (bal) {
         $("#balVal").text(bal + " RWF");
-        var date = new Date();
-        home.changeReportDate(date.getDay(), date.getMonth(), date.getFullYear());
     };
 
     this.reportGraphCallback = function (data) {
@@ -419,6 +419,7 @@ function Home() {
             pxGraph.options.plugins.zoom.zoom.rangeMin = {x: dt.valueOf()};
             dvGraph.options.plugins.zoom.zoom.rangeMin = {x: dt.valueOf()};
             lbGraph.options.plugins.zoom.zoom.rangeMin = {x: dt.valueOf()};
+            home.changeReportDate(new Date(), new Date().getDay(), new Date().getMonth(), new Date().getFullYear());
         } else {
             bvGraph.data.datasets = {};
             piGraph.data.datasets = {};
@@ -536,19 +537,7 @@ function Home() {
             [{
                 backgroundColor: ["#3e95cd", "#c46e11"],
                 data: [2]
-            }],
-            [
-                {
-                    label: "Income",
-                    backgroundColor: "#45cd7e",
-                    data: [4]
-                },
-                {
-                    label: "Outgoing",
-                    backgroundColor: "#c41922",
-                    data: [4]
-                }
-            ]
+            }]
         ];
         var dt;
         for (var i = 0; i < size; i++) {
@@ -621,81 +610,86 @@ function Home() {
         return rtn;
     };
 
-    this.changeReportDate = function (day, month, year) {
-        if (curData === undefined || curData === null) {
-            return;
-        }
-        var size = curData.length;
-        if (size) {
-            var eiSum = 0;
-            var exSum = 0;
-            var income = [0, 0, 0, 0];
-            var outgoing = [0, 0, 0, 0];
-            var dvTemp;
-            var rtn = [
-                [{
-                    backgroundColor: ["#3e95cd", "#c46e11"],
-                    data: [2]
-                }],
-                [
-                    {
-                        label: "Income",
-                        backgroundColor: "#45cd7e",
-                        data: [4]
-                    },
-                    {
-                        label: "Outgoing",
-                        backgroundColor: "#c41922",
-                        data: [4]
-                    }
-                ]
-            ];
+    this.changeReportDate = function (date, day, month, year) {
+        return function () {
+            if (curData === undefined || curData === null) {
+                return;
+            }
+            var size = curData.length;
+            if (size) {
+                var eiSum = 0;
+                var exSum = 0;
+                var income = [0, 0, 0, 0];
+                var outgoing = [0, 0, 0, 0];
+                var dvTemp;
+                var rtn = [
+                    [{
+                        backgroundColor: ["#3e95cd", "#c46e11"],
+                        data: [2]
+                    }],
+                    [
+                        {
+                            label: "Income",
+                            backgroundColor: "#45cd7e",
+                            data: [4]
+                        },
+                        {
+                            label: "Outgoing",
+                            backgroundColor: "#c41922",
+                            data: [4]
+                        }
+                    ]
+                ];
 
-            for (var i = 0; i < size - 1; i++) {
-                var tempDate = new Date(curData[0].DateTime).valueOf();
-                var start = new Date(year, month, day);
-                var end = new Date(year, month, day);
-                end.setHours(23, 59, 59, 999);
-                if (start.valueOf() <= tempDate.valueOf() && tempDate.valueOf() < end.valueOf()) {
-                    dvTemp = curData[i].DistributionVoltage / 100;
-                    var ei = curData[i].PowerImport / 6000;
-                    var ex = curData[i].PowerExport / 6000;
-                    eiSum += ei;
-                    exSum += ex;
-                    switch (true) {
-                        case (47.8 <= dvTemp):
-                            income[0] += ei * 0.274;
-                            outgoing[0] += ex * 0.274;
-                            break;
-                        case (45.8 <= dvTemp && dvTemp < 47.8):
-                            income[1] += ei * 0.548;
-                            outgoing[1] += ex * 0.548;
-                            break;
-                        case (43.8 <= dvTemp && dvTemp < 45.8):
-                            income[2] += ei * 0.822;
-                            outgoing[2] += ex * 0.822;
-                            break;
-                        case (dvTemp < 43.8):
-                            income[3] += ei * 1.096;
-                            outgoing[3] += ex * 1.096;
-                            break;
+                for (var i = 0; i < size - 1; i++) {
+                    var tempDate = new Date(curData[i].DateTime).valueOf();
+                    var start = new Date(year, month, day);
+                    var end = new Date(year, month, day);
+                    end.setHours(23, 59, 59, 999);
+                    if (start.valueOf() <= tempDate.valueOf() && tempDate.valueOf() < end.valueOf()) {
+                        dvTemp = curData[i].DistributionVoltage / 100;
+                        var ei = curData[i].PowerImport / 6000;
+                        var ex = curData[i].PowerExport / 6000;
+                        eiSum += ei;
+                        exSum += ex;
+                        switch (true) {
+                            case (47.8 <= dvTemp):
+                                income[0] += ei * 0.274;
+                                outgoing[0] += ex * 0.274;
+                                break;
+                            case (45.8 <= dvTemp && dvTemp < 47.8):
+                                income[1] += ei * 0.548;
+                                outgoing[1] += ex * 0.548;
+                                break;
+                            case (43.8 <= dvTemp && dvTemp < 45.8):
+                                income[2] += ei * 0.822;
+                                outgoing[2] += ex * 0.822;
+                                break;
+                            case (dvTemp < 43.8):
+                                income[3] += ei * 1.096;
+                                outgoing[3] += ex * 1.096;
+                                break;
+                        }
                     }
                 }
+                rtn[0][0].data[0] = eiSum;
+                rtn[0][0].data[1] = exSum;
+
+                rtn[1][0].data = income;
+                rtn[1][1].data = outgoing;
+
+                barGraph.data.datasets = rtn[0];
+                tariffGraph.data.datasets = rtn[1];
+
+            } else {
+                barGraph.data.datasets = {};
+                tariffGraph.data.datasets = {};
+
             }
-            rtn[0][0].data[0] = eiSum;
-            rtn[0][0].data[1] = exSum;
-
-            rtn[1][0].data = income;
-            rtn[1][1].data = outgoing;
-
-            barGraph.data.datasets = rtn[0];
-            tariffGraph.data.datasets = rtn[1];
-        } else {
-            barGraph.data.datasets = {};
-            tariffGraph.data.datasets = {};
-        }
-        barGraph.update();
-        tariffGraph.update();
+            barGraph.update();
+            tariffGraph.update();
+            $("#dateShownVal").text(date.toDateString());
+        };
     };
 }
 
