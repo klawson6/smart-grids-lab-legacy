@@ -129,14 +129,14 @@ function Home() {
     };
 
     this.calcTimeDiff = function (time) {
-        return 60 - (Math.round(Math.abs(new Date().getTime() - new Date(time).getTime()) / (60000)));
+        return 10 - (Math.round(Math.abs(new Date().getTime() - new Date(time).getTime()) / (60000)));
     };
 
     this.startMap = function () {
         navigator.geolocation.getCurrentPosition(function (position) {
             map = new google.maps.Map(document.getElementById("mappane"), {
                 center: {lat: position.coords.latitude, lng: position.coords.longitude},
-                zoom: 14,
+                zoom: 2,
                 mapTypeControl: false,
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
                 streetViewControl: false
