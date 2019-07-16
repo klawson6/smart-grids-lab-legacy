@@ -4,8 +4,9 @@
  * User: kylelawson
  * Date: 6/21/19
  */
-session_start();
+session_start(); // Start a session storage. Variables stored on the clients machine, can be used to check log in details
 
+// Check if the user is logged in, if not, redirect to the log in page
 if (!isset($_SESSION['loggedin'])) {
     header('Location: index.php');
     exit();

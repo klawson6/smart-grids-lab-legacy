@@ -1,11 +1,11 @@
 <?php
-// In the variables section below, replace user and password with your own MySQL credentials as created on your server
+// Database connection info
 $servername = "localhost";
 $username = "kylel";
 $password = "Sgl99Rwanda*";
 $dbname = "smartgridslab";
 
-session_start();
+session_start(); // Start a session storage. Variables stored on the clients machine, can be used to check log in details
 
 // Create MySQL connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -15,17 +15,10 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Used to tell if script is touched at all, old and unused.
-
-//$dt = date("Y-m-d H:i:s");
-//$sql = "UPDATE TEST_GPRS SET Marker = '$dt' WHERE ID = 1";
-//if ($conn->query($sql) !== TRUE) {
-//    echo "Error: " . $sql . "<br>" . $conn->error;
-//}
-
 $imei = $_GET['imei']; // The parameter of the GET request, the unique identifier, IMEI number
-$param = $_GET["param"];
+$param = $_GET["param"]; // The parameter to identify the type of data requested
 
+// Prepare a statement to get the data requested in parameter
 switch ($param) {
     case "Command":
         $stmt = $conn->prepare("SELECT Command FROM DeviceInfo WHERE IMEI = ?"); // Bind parameters ot avoid data injection
@@ -54,8 +47,6 @@ switch ($param) {
     default:
         die("Request not correct");
 }
-//echo $imei . " " . $param;
-//$stmt = $conn->prepare("SELECT ? FROM DeviceInfo WHERE IMEI = ?"); // Bind parameters ot avoid data injection
 $stmt->bind_param("s", $imei);
 $stmt->execute();
 $result = $stmt->get_result();

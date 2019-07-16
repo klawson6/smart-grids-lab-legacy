@@ -5,9 +5,8 @@
  * Date: 6/18/19
  * Time: 10:15 AM
  */
-// We need to use sessions, so you should always start sessions using the below code.
-session_start();
-// If the user is not logged in redirect to the login page...
+session_start(); // Start a session storage. Variables stored on the clients machine, can be used to check log in details
+// If the user is not logged in redirect to the login page
 if (!isset($_SESSION['loggedin'])) {
     header('Location: index.php');
     exit();
@@ -19,11 +18,12 @@ if (!isset($_SESSION['loggedin'])) {
     <meta charset="utf-8">
     <title>Home Page</title>
     <link rel="icon" href="images/icon.png"/>
+    <!--Import Stylesheets-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/datepicker.min.css">
     <link href="home.css" rel="stylesheet" type="text/css">
-
+    <!--Import javascript files and libraries-->
     <script src="js/jquery-3.4.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
@@ -35,6 +35,7 @@ if (!isset($_SESSION['loggedin'])) {
     <script src="Home.js"></script>
 </head>
 <body>
+<!--The top bar of the page-->
 <div id="toppane">
     <div id="logodiv">
         <a href="home.php">
@@ -42,14 +43,11 @@ if (!isset($_SESSION['loggedin'])) {
         </a>
     </div>
     <span id="titletext">SGL MONITOR</span>
-    <!--    <div id="officondiv">-->
-    <!--        <a href="logout.php">-->
-    <!--            <img class="titleicon" id="officon" src="images/officon.png"/>-->
-    <!--        </a>-->
-    <!--    </div>-->
 </div>
+<!--The main body that contains the information we want to interact with-->
 <div id="mainpane">
     <div id="menu">
+        <!--The menu of pages to navigate to-->
         <div class="menutags" id="head">
             <p>CONTROL PANEL</p>
             <hr class="menubar">
@@ -74,7 +72,9 @@ if (!isset($_SESSION['loggedin'])) {
             </a>
         </div>
     </div>
+    <!--The div containing the live data page-->
     <div class="infoPane" id="browseDiv">
+        <!--Live data graphs-->
         <div id="graphpane">
             <div class="graph" id="volgraph">
                 <canvas id="volgraphcanvas"></canvas>
@@ -83,6 +83,7 @@ if (!isset($_SESSION['loggedin'])) {
                 <canvas id="powgraphcanvas"></canvas>
             </div>
         </div>
+        <!--Live data info and map-->
         <div id="lowerinfo">
             <div id="deviceinfo">
                 <div class="deviceinfotags" id="head">
@@ -120,7 +121,9 @@ if (!isset($_SESSION['loggedin'])) {
             </div>
         </div>
     </div>
+    <!--The div containing the report page-->
     <div class="infoPane" id="reportDiv" style="display:none">
+        <!--The list of devices to view reports on-->
         <div class="reportTile" id="deviceList">
             <div id="formDiv">
                 <input type="text" name="imei" placeholder="IMEI" id="imeiField">
@@ -135,6 +138,7 @@ if (!isset($_SESSION['loggedin'])) {
                 </div>
             </div>
         </div>
+        <!--The report graphs-->
         <div class="reportTile" id="reportGraphs">
             <div id="filterDiv" class="divFilter">
                 <label for="time" id="filterText">Show recordings from the last: </label>
@@ -188,8 +192,10 @@ if (!isset($_SESSION['loggedin'])) {
             </div>
         </div>
     </div>
+    <!--The div to contain the add device page-->
     <div class="infoPane" id="addDiv" style="display:none">
         <div id="textDiv">
+            <!--The form to fill out to add a device-->
             <div id="detailDiv">
                 <label for="imei" id="imeiLabel" class="addClass">IMEI: </label>
                 <input type="text" name="imei" placeholder="IMEI" id="addIMEI" class="addClass">
@@ -213,6 +219,7 @@ if (!isset($_SESSION['loggedin'])) {
                 <span id="submitText"></span>
             </div>
         </div>
+        <!--The map-->
         <div id="mappane2">
         </div>
     </div>

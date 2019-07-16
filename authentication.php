@@ -5,7 +5,7 @@
  * Date: 6/18/19
  * Time: 9:49 AM
  */
-session_start();
+session_start(); // Start a session storage. Variables stored on the clients machine, can be used to check log in details
 
 // Database connection info
 $DATABASE_HOST = 'localhost';

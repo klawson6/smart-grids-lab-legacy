@@ -5,13 +5,13 @@
  * Date: 6/18/19
  * Time: 10:25 AM
  */
-// We need to use sessions, so you should always start sessions using the below code.
-session_start();
+session_start(); // Start a session storage. Variables stored on the clients machine, can be used to check log in details
 // If the user is not logged in redirect to the login page...
 if (!isset($_SESSION['loggedin'])) {
     header('Location: index.html');
     exit();
 }
+// Database connection info
 $DATABASE_HOST = 'localhost';
 $DATABASE_USER = 'kylel';
 $DATABASE_PASS = 'Sgl99Rwanda*';

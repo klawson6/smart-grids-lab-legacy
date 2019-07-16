@@ -5,13 +5,15 @@
  * Date: 6/19/19
  * Time: 3:46 PM
  */
-session_start();
+session_start(); // Start a session storage. Variables stored on the clients machine, can be used to check log in details
 
-//if (!isset($_SESSION['loggedin'])) {
-//    header('Location: index.php');
-//    exit();
-//}
+// Check if the user is logged in, if not, redirect to the log in page
+if (!isset($_SESSION['loggedin'])) {
+    header('Location: index.php');
+    exit();
+}
 
+// Check the GET parameter is set before continuing
 if(!isset($_GET["imei"]))
 {
     die('Incorrect request' . mysqli_connect_error());
@@ -46,8 +48,6 @@ $dt->modify('-4 hours'); // Go back 4 hours for a desired window of values
 $dtSQL = $dt->format('Y-m-d H:i:s'); // Set the format of DateTime
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
 if ($stmt = $con->prepare("Select * FROM $table")) {
-    // Bind parameters. Data types specified by letters
-//    $stmt->bind_param('s', $dtSQL);
     $stmt->execute();
     // Store the result so we can json encode the data
     $res = $stmt->get_result();

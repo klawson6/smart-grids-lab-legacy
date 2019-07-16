@@ -5,8 +5,9 @@ $username = "kylel";
 $password = "Sgl99Rwanda*";
 $dbname = "smartgridslab";
 
-session_start();
+session_start(); // Start a session storage. Variables stored on the clients machine, can be used to check log in details
 
+// Check if the user is logged in, if not, redirect to the log in page
 if (!isset($_SESSION['loggedin'])) {
     header('Location: index.php');
     exit();
@@ -18,14 +19,6 @@ $conn = mysqli_connect($servername, $username, $password, $dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-
-// Used to tell if script is touched at all, old and unused.
-
-//$dt = date("Y-m-d H:i:s");
-//$sql = "UPDATE TEST_GPRS SET Marker = '$dt' WHERE ID = 1";
-//if ($conn->query($sql) !== TRUE) {
-//    echo "Error: " . $sql . "<br>" . $conn->error;
-//}
 
 $imei = $_GET['imei']; // The parameter of the GET request, the unique identifier, IMEI number
 $cmd = $_GET['cmd']; // The parameter of the GET request, the new command to be placed on database

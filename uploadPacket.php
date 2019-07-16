@@ -1,5 +1,5 @@
 <?php
-// In the variables section below, replace user and password with your own MySQL credentials as created on your server
+// Check if the user is logged in, if not, redirect to the log in page
 $servername = "localhost";
 $username = "kylel";
 $password = "Sgl99Rwanda*";
@@ -21,16 +21,8 @@ $tz = 'Europe/London'; // Set timezone
 $timestamp = time(); // Init new time obj
 $dt = new DateTime("now", new DateTimeZone($tz)); // Set DateTime to now in the set timezone
 $dt->setTimestamp($timestamp); // Set DateTime to only a time obj
-$dt->modify('-10 minutes'); // Move back the time obj by 4 hours to compensate for data sampling over time in the incoming packet
+$dt->modify('-10 minutes'); // Move back the time obj by 10 minutes to compensate for data sampling over time in the incoming packet
 $dtSQL = $dt->format('Y-m-d H:i:s'); // Set time format
-//echo $dtSQL;
-
-//$sql = "UPDATE TEST_GPRS SET Marker = '$dtSQL' WHERE ID = 1"; // Indicates if GPRS module touched server, old test code not needed.
-//if ($conn->query($sql) === TRUE) {
-//    echo "Date-time stamped.";
-//} else {
-//    echo "Error: " . $sql . "<br>" . $conn->error;
-//}
 
 $imei = $data->IMEI;
 $table = "data_" . $imei; // Set name for table of data for the GPRS module that sent data
@@ -54,10 +46,11 @@ $income = 0;
 $outgoing = 0;
 $total = 0;
 if (is_array($bv) && is_array($pi) && is_array($px) && is_array($dv) && is_array($lb)) { // Verify data structure
-    for ($i = 0; $i < count($bv); $i++) { // For all 48 samples
-        $dt->modify('+1 minutes'); // Modify timestamp to be unique and representative to every sample of data taken over the 4 hours
+    for ($i = 0; $i < count($bv); $i++) { // For all samples
+        $dt->modify('+1 minutes'); // Modify timestamp to be unique and representative to every sample of data taken over the 10 minutes
         $dtSQL = $dt->format('Y-m-d H:i:s'); // Set format of time
 
+        // Find the change in balance for this device base don energy demand and corresponding tariffs
         switch (true) {
             case (4780 <= $dv[$i]):
                 $income += $pi[$i] * 0.00004567;
@@ -87,7 +80,7 @@ if (is_array($bv) && is_array($pi) && is_array($px) && is_array($dv) && is_array
     }
     $total = $income-$outgoing;
     echo($total."\n");
-    if ($stmt = $conn->prepare("SELECT Balance FROM DeviceInfo WHERE IMEI = ?")) { // Mark on database when the device last posted
+    if ($stmt = $conn->prepare("SELECT Balance FROM DeviceInfo WHERE IMEI = ?")) { // Get the old balance
         // Bind parameters to avoid data injection
         $stmt->bind_param("s",$imei);
         $stmt->execute();
@@ -100,7 +93,7 @@ if (is_array($bv) && is_array($pi) && is_array($px) && is_array($dv) && is_array
         }
     }
 
-    if ($stmt = $conn->prepare("UPDATE DeviceInfo SET LastActivity = ? , Balance = ? WHERE IMEI = ?")) { // Mark on database when the device last posted
+    if ($stmt = $conn->prepare("UPDATE DeviceInfo SET LastActivity = ? , Balance = ? WHERE IMEI = ?")) { // Mark on database when the device last posted and update new balance
         // Bind parameters to avoid data injection
         $stmt->bind_param("sds", $dtSQL, $total, $imei);
         $stmt->execute();
