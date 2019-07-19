@@ -45,6 +45,27 @@ $lb = $data->LoadBusbar;
 $income = 0;
 $outgoing = 0;
 $total = 0;
+$bal = 0;
+$command = 0;
+$pending = 0;
+$z = 0;
+
+if ($stmt = $conn->prepare("SELECT Command, Pending, Balance FROM DeviceInfo WHERE IMEI = ?")) { // Get the old balance
+    // Bind parameters to avoid data injection
+    $stmt->bind_param("s", $imei);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $command = $row["Command"];
+            $pending = $row["Pending"];
+            $bal = $row["Balance"];
+            echo $command . "\n";
+            echo $bal . "\n";
+        }
+    }
+}
+
 if (is_array($bv) && is_array($pi) && is_array($px) && is_array($dv) && is_array($lb)) { // Verify data structure
     for ($i = 0; $i < count($bv); $i++) { // For all samples
         $dt->modify('+1 minutes'); // Modify timestamp to be unique and representative to every sample of data taken over the 10 minutes
@@ -69,33 +90,42 @@ if (is_array($bv) && is_array($pi) && is_array($px) && is_array($dv) && is_array
                 $outgoing += $px[$i] * 0.0001826;
                 break;
         }
-        echo($income . " " .$outgoing . "\n");
+        echo($income . " " . $outgoing . "\n");
         // Insert sample of data into the unique table
         if ($stmt = $conn->prepare("INSERT INTO $table (DateTime, BatteryVoltage, PowerImport, PowerExport, DistributionVoltage, LoadBusbar) VALUES (?,?,?,?,?,?)")) {
             // Bind parameters to avoid data injection
-            $stmt->bind_param("siiiii", $dtSQL, $bv[$i], $pi[$i], $px[$i], $dv[$i], $lb[$i]);
+            switch ($command) {
+                case 0 :
+                    echo "case 0";
+                    $stmt->bind_param("siiiii", $dtSQL, $bv[$i], $pi[$i], $px[$i], $dv[$i], $lb[$i]);
+                    break;
+                case 1 :
+                    echo "case 1";
+                    $stmt->bind_param("siiiii", $dtSQL, $bv[$i], $pi[$i], $px[$i], $dv[$i], $z);
+                    break;
+                case 2:
+                    echo "case 2";
+                    $stmt->bind_param("siiiii", $dtSQL, $z, $pi[$i], $px[$i], $dv[$i], $lb[$i]);
+                    break;
+                case 3:
+                    echo "case 3";
+                    $stmt->bind_param("siiiii", $dtSQL, $z, $pi[$i], $px[$i], $dv[$i], $z);
+                    break;
+                default:
+                    die("Bad command");
+            }
             $stmt->execute();
         }
         $stmt->close();
     }
-    $total = $income-$outgoing;
-    echo($total."\n");
-    if ($stmt = $conn->prepare("SELECT Balance FROM DeviceInfo WHERE IMEI = ?")) { // Get the old balance
-        // Bind parameters to avoid data injection
-        $stmt->bind_param("s",$imei);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $total = $row["Balance"] + $total;
-                echo $total;
-            }
-        }
-    }
+    $total = $income - $outgoing;
+    $total = $bal + $total;
+    echo $total . "\n";
 
-    if ($stmt = $conn->prepare("UPDATE DeviceInfo SET LastActivity = ? , Balance = ? WHERE IMEI = ?")) { // Mark on database when the device last posted and update new balance
+
+    if ($stmt = $conn->prepare("UPDATE DeviceInfo SET Command = ? , LastActivity = ? , Balance = ? WHERE IMEI = ?")) { // Mark on database when the device last posted and update new balance
         // Bind parameters to avoid data injection
-        $stmt->bind_param("sds", $dtSQL, $total, $imei);
+        $stmt->bind_param("isds", $pending, $dtSQL, $total, $imei);
         $stmt->execute();
     }
     $stmt->close();

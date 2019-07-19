@@ -23,7 +23,7 @@ if (!$conn) {
 $imei = $_GET['imei']; // The parameter of the GET request, the unique identifier, IMEI number
 $cmd = $_GET['cmd']; // The parameter of the GET request, the new command to be placed on database
 
-$stmt = $conn->prepare("UPDATE DeviceInfo SET Command = ? WHERE IMEI = ?"); // Bind parameters ot avoid data injection
+$stmt = $conn->prepare("UPDATE DeviceInfo SET Pending = ? WHERE IMEI = ?"); // Bind parameters ot avoid data injection
 $stmt->bind_param("ii", $cmd, $imei);
 $stmt->execute();
 
